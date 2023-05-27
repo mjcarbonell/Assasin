@@ -27,6 +27,7 @@ def get_time():
 
 db.define_table(
     'player',
+    Field('username'),
     Field('nickname'),
     Field('group_id'),
     Field('wins'),

@@ -12,6 +12,8 @@ let init = (app) => {
         rows: [], // rows are the auth.users in the database 
         players: [],
         nickname: "", // current username 
+        currentUser: "", 
+        inPlayers: false, 
         
     };    
     
@@ -27,18 +29,20 @@ let init = (app) => {
     }
     app.add_player = function () {
         console.log("add player ");
-
         axios.post(add_player_url,
             {
+                username: app.vue.currentUser,
                 nickname: app.vue.nickname,
             }).then(function (response){
                 let new_player = {};
+                new_player.username = app.vue.currentUser; 
                 new_player.nickname = app.vue.nickname;
                 new_player.group_id = '';
                 new_player.wins = ''; 
                 new_player.last_word = '';
-                players.push(new_player);
+                app.vue.players.push(new_player);
                 app.enumerate(app.vue.players); 
+                Vue.set(app.vue, 'inPlayers', true);
             })
 
     }
@@ -65,7 +69,9 @@ let init = (app) => {
         axios.get(get_users_url).then(function (response){
             app.vue.rows = app.enumerate(response.data.rows); 
             app.vue.players = app.enumerate(response.data.players);
+            app.vue.currentUser = response.data.currentUser; 
         })
+        
     };
     // Call to the initializer.
     app.init();

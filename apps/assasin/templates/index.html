@@ -9,24 +9,26 @@
 
 <div class="section" id="vue-target" v-cloak>
   <h1>Welcome to Assasin!</h1>
-  {{players}}
+  <!-- {{players}} -->
 
   <!-- CHECKS IF PLAYER IS REGISTERED -->
-  <div v-if="players.length == 0">
-    length is zero
+  {{inPlayers}}
+  <div v-if="inPlayers == false">
+    <input class="input" type="text" placeholder="type nickname here" v-model="nickname" /> 
+    <button class="button is-link" @click="add_player">set nickname</button>
   </div>
-  <div v-else>
+  <div v-else> 
     else
   </div>
 
-  <div class="field">
+  <!-- <div class="field">
     <input class="input" type="text" placeholder="type nickname here" v-model="nickname" /> 
   </div>
   <div class="field">
     <div class="control">
       <button class="button is-link" @click="add_player">set nickname</button>
     </div>
-  </div>
+  </div> -->
 
 
   <div class="field">

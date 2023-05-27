@@ -69,8 +69,9 @@ def get_users():
 @action("add_player", method="POST")
 @action.uses(db, auth.user, url_signer.verify())
 def add_player():
+    username = request.json.get('username')
     nickname = request.json.get('nickname')
-    id = db.player.insert(nickname=nickname)
+    id = db.player.insert(username=username, nickname=nickname)
     return dict(id=id, message="added player successfully")
 
 # @action('edit_meow', method="POST")
