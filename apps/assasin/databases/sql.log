@@ -1,0 +1,64 @@
+timestamp: 2023-05-25T13:24:40.186561
+CREATE TABLE "py4web_session"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "rkey" CHAR(512),
+    "rvalue" TEXT,
+    "expiration" INTEGER,
+    "created_on" TIMESTAMP,
+    "expires_on" TIMESTAMP
+);
+success!
+timestamp: 2023-05-25T13:24:40.207152
+CREATE TABLE "auth_user"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "username" CHAR(512) UNIQUE,
+    "email" CHAR(512) UNIQUE,
+    "password" CHAR(512),
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "sso_id" CHAR(512),
+    "action_token" CHAR(512),
+    "last_password_change" TIMESTAMP,
+    "past_passwords_hash" TEXT
+);
+success!
+timestamp: 2023-05-25T13:24:40.219257
+CREATE TABLE "auth_user_tag_groups"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "tagpath" CHAR(512),
+    "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  
+);
+success!
+timestamp: 2023-05-25T13:24:40.230275
+CREATE TABLE "player"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "username" CHAR(512),
+    "group_id" CHAR(512),
+    "user_email" CHAR(512),
+    "creation_date" TIMESTAMP
+);
+success!
+timestamp: 2023-05-25T13:24:40.242068
+CREATE TABLE "group"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "author" CHAR(512),
+    "content" CHAR(512),
+    "reply_owner" CHAR(512),
+    "total_replies" CHAR(512),
+    "timestamp" TIMESTAMP
+);
+success!
+timestamp: 2023-05-25T14:18:09.613261
+ALTER TABLE "player" ADD "wins" CHAR(512);
+success!
+timestamp: 2023-05-25T23:42:31.883522
+ALTER TABLE "player" ADD "nickname" CHAR(512);
+success!
+success!
+success!
+success!
+timestamp: 2023-05-26T22:45:47.905910
+ALTER TABLE "player" ADD "last_word" CHAR(512);
+success!
+success!
+success!

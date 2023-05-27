@@ -1,0 +1,204 @@
+timestamp: 2023-04-19T18:45:52.037221
+CREATE TABLE "auth_user"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "username" CHAR(512) UNIQUE,
+    "email" CHAR(512) UNIQUE,
+    "password" CHAR(512),
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "sso_id" CHAR(512),
+    "action_token" CHAR(512),
+    "last_password_change" TIMESTAMP,
+    "past_passwords_hash" TEXT
+);
+success!
+timestamp: 2023-04-19T18:45:52.045862
+CREATE TABLE "auth_user_tag_groups"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "tagpath" CHAR(512),
+    "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  
+);
+success!
+timestamp: 2023-04-24T13:47:05.864848
+CREATE TABLE "bird"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "bird_name" CHAR(512),
+    "bird_weight" INTEGER,
+    "bird_diet" CHAR(512),
+    "bird_habitat" CHAR(512),
+    "bird_sightings" INTEGER,
+    "created_by" CHAR(512),
+    "creation_date" TIMESTAMP
+);
+success!
+timestamp: 2023-04-29T13:57:23.271974
+CREATE TABLE "book"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "created_by" CHAR(512),
+    "creation_date" TIMESTAMP
+);
+success!
+timestamp: 2023-04-29T14:10:56.431513
+CREATE TABLE "contact"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "created_by" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "user_email" CHAR(512),
+    "creation_date" TIMESTAMP
+);
+success!
+success!
+success!
+success!
+success!
+timestamp: 2023-04-29T16:31:07.042441
+CREATE TABLE "phone"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "contact_id" INTEGER REFERENCES "contact" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "phone_number" CHAR(512),
+    "purpose" CHAR(512),
+    "user_email" CHAR(512),
+    "creation_date" TIMESTAMP
+);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+DROP TABLE "phone";
+success!
+DROP TABLE "contact";
+success!
+DROP TABLE "auth_user_tag_groups";
+success!
+DROP TABLE "auth_user";
+success!
+timestamp: 2023-04-30T02:18:48.164793
+CREATE TABLE "auth_user"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "username" CHAR(512) UNIQUE,
+    "email" CHAR(512) UNIQUE,
+    "password" CHAR(512),
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "sso_id" CHAR(512),
+    "action_token" CHAR(512),
+    "last_password_change" TIMESTAMP,
+    "past_passwords_hash" TEXT
+);
+success!
+timestamp: 2023-04-30T02:18:48.171916
+CREATE TABLE "auth_user_tag_groups"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "tagpath" CHAR(512),
+    "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  
+);
+success!
+timestamp: 2023-04-30T02:18:48.181143
+CREATE TABLE "contact"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "user_email" CHAR(512),
+    "creation_date" TIMESTAMP
+);
+success!
+timestamp: 2023-04-30T02:18:48.188671
+CREATE TABLE "phone"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "contact_id" INTEGER REFERENCES "contact" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "phone_number" CHAR(512),
+    "purpose" CHAR(512),
+    "user_email" CHAR(512),
+    "creation_date" TIMESTAMP
+);
+success!
+timestamp: 2023-04-30T12:38:24.681119
+ALTER TABLE "contact" ADD "created_by" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ;
+success!
