@@ -8,28 +8,22 @@
 
 
 <div class="section" id="vue-target" v-cloak>
-  <h1>Welcome to Assasin!</h1>
   <!-- {{players}} -->
 
   <!-- CHECKS IF PLAYER IS REGISTERED -->
-  {{inPlayers}}
   <div v-if="inPlayers == false">
+    <h1>Welcome to Assasin!</h1>
     <input class="input" type="text" placeholder="type nickname here" v-model="nickname" /> 
     <button class="button is-link" @click="add_player">set nickname</button>
   </div>
   <div v-else> 
-    else
+    welcome back! 
+    "edit profile button here"
   </div>
 
-  <!-- <div class="field">
-    <input class="input" type="text" placeholder="type nickname here" v-model="nickname" /> 
-  </div>
-  <div class="field">
-    <div class="control">
-      <button class="button is-link" @click="add_player">set nickname</button>
-    </div>
-  </div> -->
-
+  <a class="button" href="[[=URL('group_page', signer=url_signer)]]">
+    <span class="icon">Go to group</span> 
+  </a>
 
   <div class="field">
     <div class="control">

@@ -70,7 +70,15 @@ let init = (app) => {
             app.vue.rows = app.enumerate(response.data.rows); 
             app.vue.players = app.enumerate(response.data.players);
             app.vue.currentUser = response.data.currentUser; 
+            console.log("pre");
+            for(let i of app.vue.players){
+                console.log(i); 
+                if(i.username == app.vue.currentUser){
+                    Vue.set(app.vue, 'inPlayers', true); 
+                }
+            }
         })
+        
         
     };
     // Call to the initializer.

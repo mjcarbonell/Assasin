@@ -50,6 +50,7 @@ def index():
         current=get_user_email(),
         get_users_url = URL('get_users', signer=url_signer),
         add_player_url = URL('add_player', signer=url_signer),
+        url_signer=url_signer
     )
 
 @action("get_users")
@@ -73,6 +74,13 @@ def add_player():
     nickname = request.json.get('nickname')
     id = db.player.insert(username=username, nickname=nickname)
     return dict(id=id, message="added player successfully")
+
+
+@action('group_page', method=["GET", "POST"])
+@action.uses('group_page.html', url_signer, db, session, auth.user, url_signer.verify())
+def group_page():
+ 
+    return dict()
 
 # @action('edit_meow', method="POST")
 # @action.uses(db, auth.user, url_signer.verify())
