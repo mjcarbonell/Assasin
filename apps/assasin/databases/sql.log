@@ -57,3 +57,6 @@ CREATE TABLE "statistics"(
     "games_survived" INTEGER
 );
 success!
+timestamp: 2023-06-03T14:44:51.185624
+ALTER TABLE "group" ADD "active" CHAR(1);
+success!

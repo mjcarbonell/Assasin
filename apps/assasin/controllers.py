@@ -63,13 +63,13 @@ def group_page():
         create_group_url = URL('create_group', signer=url_signer),
         change_id_url = URL('change_id', signer=url_signer), 
         delete_group_url = URL('delete_group', signer=url_signer),
+        set_active_url = URL('set_active', signer=url_signer), 
         url_signer=url_signer,
     )
 
 @action('game_page', method=["GET", "POST"])
 @action.uses('game_page.html', url_signer, db, session, auth.user, url_signer.verify())
 def game_page():
-    print("HEREEEE")
     return dict(
         get_users_url = URL('get_users', signer=url_signer),
         get_groups_url = URL('get_groups', signer=url_signer),
@@ -197,9 +197,24 @@ def delete_group():
     for group in groups:
         group_to_delete = db.group(group.id)  # Fetch the specific group to delete
         group_to_delete.delete_record()  # Delete the group
-
     return "ok"
 
+@action("set_active", method="POST")
+@action.uses(db, auth.user, url_signer.verify())
+def set_active():
+    group_id = request.json.get('group_id')
+    groups = db(db.group).select()
+    active_group = None 
+    for g in groups: 
+        if g.id == group_id: 
+            active_group = g 
+            g.update_record(active=True)  # Update the group_id attribute of the player
+        else: 
+            print("FALSE")
+            g.update_record(active=False)
+    
+    return dict(active_group=active_group)
+       
 
 # @action('edit_meow', method="POST")
 # @action.uses(db, auth.user, url_signer.verify())

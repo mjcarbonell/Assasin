@@ -32,6 +32,7 @@ db.define_table(
     Field('current_assasin'),
     Field('winner'), # this can either be bystanders or the username of the assasin
     Field('players', 'list:string'), 
+    Field('active', 'boolean', default=False)
 )
 db.define_table(
     'player',

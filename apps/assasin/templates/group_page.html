@@ -23,9 +23,9 @@
         <div class="group-wrapper">
             <a class="button" @click="add_yourself(group.id)">{{group.creator}}'s group</a>
             <span class="tag is-yellow">total players: {{group.total_players}}</span>
-            <a v-if="group.total_players >= 3" class="button is-primary " href="[[=URL('game_page', signer=url_signer)]]">
+            <a v-if="group.total_players >= 3" class="button is-primary" @click="start_game(group.id)">
                 <span class="icon"></span> 
-                <span>Start Game</span>
+                <span>set active</span>
             </a>
         
         </div>
@@ -39,13 +39,15 @@
     </h2>
 
       
-      
+
     
     <h1 style="margin-bottom: 20px;">&nbsp;</h1>
-    {{game_started}}
-    <a v-if="game_started == true" class="button is-primary " href="[[=URL('game_page', signer=url_signer)]]">
+
+    <a v-if="active_group != null" class="button is-primary " href="[[=URL('game_page', signer=url_signer)]]">
         <span class="icon"></span> 
-        <span>go to current session</span>
+        <span>{{active_group.creator}}'s group is active </span>
+        <h1 style="margin-bottom: 20px;">&nbsp;</h1>
+        <span>click here to go it </span>
     </a>
 
     <h2> 
@@ -76,6 +78,7 @@
   let create_group_url = "[[=XML(create_group_url)]]"; 
   let change_id_url = "[[=XML(change_id_url)]]"; 
   let delete_group_url = "[[=XML(delete_group_url)]]"; 
+  let set_active_url = "[[=XML(set_active_url)]]";
 </script>
 
 <script src="js/group_page.js"></script>

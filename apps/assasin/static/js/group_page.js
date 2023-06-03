@@ -14,6 +14,7 @@ let init = (app) => {
         inPlayers: false, 
         currentID: -99, 
         game_started: false, 
+        active_group: null 
     };    
     
     app.enumerate = (a) => {
@@ -94,45 +95,63 @@ let init = (app) => {
                             app.enumerate(app.vue.groups); 
                         }
                     }
-                    console.log(app.vue.groups);
-                    console.log(app.vue.players); 
+                    app.count_players(); 
+                    // console.log(app.vue.groups);
+                    // console.log(app.vue.players); 
                 })
-            app.count_players(); 
+            
         })
 
     }
     app.count_players = function () {
-        console.log(app.vue.groups);
-        console.log(app.vue.players);
+        // console.log(app.vue.groups);
+        // console.log(app.vue.players);
         for(let g of app.vue.groups){
             Vue.set(g, 'total_players', 0); 
             for(let p of app.vue.players){
                 if(parseInt(g.id) == parseInt(p.group_id)){
                     newTotal = g.total_players + 1; 
                     Vue.set(g, 'total_players', newTotal); 
-                    console.log("found one");
+                    // console.log("found one");
                 }
             }
         }
-
         console.log("COUNTING")
         console.log(app.vue.groups); 
         
     }
-    app.start_game = function () {
-        console.log('starting game'); 
+    app.start_game = function (group_id) { // setting group to true and all others to false 
+        // console.log('starting game'); 
+        axios.post(set_active_url,
+            {
+                group_id: group_id,
+            }).then(function (response){
+                // Vue.set(app.vue, 'active_group', response.data.active_group); 
+                // console.log("ACTIVEE")
+                // console.log(app.vue.active_group); 
+        })
         Vue.set(app.vue, 'game_started', true); 
     }
-    app.check_status = function () {
-        console.log("heya");
-        console.log(app.vue.game_started); 
+    app.check_status = function() {
+        temp = []; 
+        axios.get(get_groups_url).then(function (response){
+            temp = app.enumerate(response.data.groups);
+            for(let g of temp){
+                if(g.active==true){
+                    Vue.set(app.vue, 'active_group', g); 
+                }
+            }
+        })
+        console.log(app.vue.active_group); 
+        
     }
+   
     app.methods = {
         create_group: app.create_group, 
         add_yourself: app.add_yourself, 
         count_players: app.count_players,
         start_game: app.start_game, 
-        check_status: app.check_status,
+        check_status: app.check_status, 
     };
 
     app.vue = new Vue({
@@ -150,14 +169,19 @@ let init = (app) => {
         axios.get(get_groups_url).then(function (response){
             app.vue.groups = app.enumerate(response.data.groups);
         })
+        for(let g of app.vue.groups){
+            Vue.set(g, 'active', false);
+        }
+        
         // console.log(app.vue.players);
         // console.log(app.vue.groups); 
         
         setTimeout(function() {
             app.count_players();
         }, 1000);
+        // app.check_status(); 
+        setInterval(app.check_status, 2000); 
 
-        setInterval(app.check_status(), 2000); 
        
     };
     app.init();
