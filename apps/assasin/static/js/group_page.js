@@ -50,6 +50,7 @@ let init = (app) => {
                             for(let g of app.vue.groups){
                                 if(g.creator==app.vue.currentUser && g.id != newResponse.data.id){
                                     Vue.delete(app.vue.groups, g._idx);
+                                    app.enumerate(app.vue.groups); 
                                 }
                             }
                             
@@ -58,7 +59,7 @@ let init = (app) => {
                 })
 
                 // app.init(); // refreshing our players and groups. 
-                app.vue.groups.push()
+               
                 console.log("refresh")
                 console.log(app.vue.groups);
                 console.log(app.vue.players); 
@@ -90,7 +91,9 @@ let init = (app) => {
                     for(let g of app.vue.groups){
                         if(g.creator==app.vue.currentUser){
                             console.log("deleting")
+                            console.log(g.id)
                             Vue.delete(app.vue.groups, g._idx);
+                            app.enumerate(app.vue.groups); 
                         }
                     }
                 })
