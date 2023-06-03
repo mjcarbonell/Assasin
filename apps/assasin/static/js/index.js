@@ -1,9 +1,5 @@
-// This will be the object that will contain the Vue attributes
-// and be used to initialize it.
 let app = {};
 
-// Given an empty app object, initializes it filling its attributes,
-// creates a Vue instance, and then initializes the Vue instance.
 let init = (app) => {
 
     // This is the Vue data.
@@ -18,14 +14,13 @@ let init = (app) => {
     };    
     
     app.enumerate = (a) => {
-        // This adds an _idx field to each element of the array.
         let k = 0;
         a.map((e) => {e._idx = k++;});
         return a;
     };    
     app.create_group = function () {
         console.log('create group func'); 
-        console.log(app.vue.rows);  
+        // console.log(app.vue.rows);  
     }
     app.add_player = function () {
         console.log("add player ");
@@ -47,24 +42,19 @@ let init = (app) => {
 
     }
 
-    // This contains all the methods.
     app.methods = {
-        // Complete as you see fit.
         create_group: app.create_group, 
         add_player: app.add_player, 
 
     };
 
-    // This creates the Vue instance.
     app.vue = new Vue({
         el: "#vue-target",
         data: app.data,
         methods: app.methods
     });
 
-    // And this initializes it.
     app.init = () => {
-        // Put here any initialization code.
         console.log("init");
         axios.get(get_users_url).then(function (response){
             app.vue.rows = app.enumerate(response.data.rows); 
@@ -77,14 +67,12 @@ let init = (app) => {
                     Vue.set(app.vue, 'inPlayers', true); 
                 }
             }
+            
         })
         
         
     };
-    // Call to the initializer.
     app.init();
 };
 
-// This takes the (empty) app object, and initializes it,
-// putting all the code in it. 
 init(app);

@@ -11,7 +11,7 @@
   <!-- {{players}} -->
 
   <!-- CHECKS IF PLAYER IS REGISTERED -->
-  <div v-if="inPlayers == false">
+  <div v-if="inPlayers == false" style="margin-bottom: 20px;">
     <h1>Welcome to Assasin!</h1>
     <input class="input" type="text" placeholder="type nickname here" v-model="nickname" /> 
     <button class="button is-link" @click="add_player">set nickname</button>
@@ -21,19 +21,12 @@
     "edit profile button here"
   </div>
 
-  <a class="button" href="[[=URL('group_page', signer=url_signer)]]">
-    <span class="icon">Go to group</span> 
-  </a>
+  <h1 style="margin-bottom: 20px;">&nbsp;</h1>
 
-  <div class="field">
-    <div class="control">
-      <button class="button is-link" @click="create_group">click here to create a group!</button>
-    </div>
-  </div>
-
-
-
-
+    <a class="button" href="[[=URL('group_page', signer=url_signer)]]">
+      <span class="icon"></span> 
+      <span>Go to group</span>
+    </a>
 
 </div>
 

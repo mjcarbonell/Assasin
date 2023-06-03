@@ -25,24 +25,22 @@ def get_time():
 #
 ## always commit your models to avoid problems later
 
+
+db.define_table(
+    'group',
+    Field('creator'),
+    Field('current_assasin'),
+    Field('winner'), # this can either be bystanders or the username of the assasin
+    Field('players', 'list:string'), 
+)
 db.define_table(
     'player',
     Field('username'),
     Field('nickname'),
-    Field('group_id'),
+    Field('group_id', 'reference group'),
     Field('wins'),
     Field('last_word'),
-    Field('user_email',  default=get_user_email),
     Field('creation_date', 'datetime', default=get_time),
-)
-
-db.define_table(
-    'group',
-    Field('author'),
-    Field('content'),
-    Field('reply_owner'),
-    Field('total_replies'), 
-    Field('timestamp', 'datetime', default=get_time),
 )
 
 db.commit()

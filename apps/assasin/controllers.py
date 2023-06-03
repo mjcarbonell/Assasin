@@ -53,6 +53,21 @@ def index():
         url_signer=url_signer
     )
 
+@action('group_page', method=["GET", "POST"])
+@action.uses('group_page.html', url_signer, db, session, auth.user, url_signer.verify())
+def group_page():
+    return dict(
+        get_users_url = URL('get_users', signer=url_signer),
+        add_player_url = URL('add_player', signer=url_signer),
+        get_groups_url = URL('get_groups', signer=url_signer),
+        create_group_url = URL('create_group', signer=url_signer),
+        change_id_url = URL('change_id', signer=url_signer), 
+        delete_group_url = URL('delete_group', signer=url_signer),
+        url_signer=url_signer,
+
+    )
+
+# BACKEND FUNCTIONS 
 @action("get_users")
 @action.uses(db, auth.user)
 def get_users():
@@ -67,6 +82,47 @@ def get_users():
     # GRABBING GROUP 
     return dict(rows=rows, currentUser=currentUser, players=players)
 
+@action("get_groups")
+@action.uses(db, auth.user)
+def get_groups():
+    # grabbing users 
+    groups = db(db.group).select() 
+    return dict(groups=groups)
+
+@action("create_group", method="POST")
+@action.uses(db, auth.user, url_signer.verify())
+def create_group():  
+    creator = request.json.get('creator') 
+    current_assasin = request.json.get('current_assasin')
+    winner = request.json.get('winner')
+    players = request.json.get('players')
+    id = db.group.insert(
+        creator = creator,
+        current_assasin = current_assasin,
+        winner = winner, 
+        players = players,  
+    )
+
+    return dict(id = id, message="added group successfully") 
+
+@action("change_id", method="POST")
+@action.uses(db, auth.user, url_signer.verify())
+def change_id():
+    id = request.json.get('id')
+    print("IDDD")
+    print(id)
+    currentUser = request.json.get('currentUser')
+    player = db(db.player.username == currentUser).select().first()
+
+    if player:
+        player.update_record(group_id=id)  # Update the group_id attribute of the player
+        message = "Group ID updated successfully"
+    else:
+        message = "Player not found"
+    return dict(id=id, message="added player successfully")
+
+
+
 @action("add_player", method="POST")
 @action.uses(db, auth.user, url_signer.verify())
 def add_player():
@@ -75,12 +131,25 @@ def add_player():
     id = db.player.insert(username=username, nickname=nickname)
     return dict(id=id, message="added player successfully")
 
+@action('delete_group')
+@action.uses(url_signer.verify(), db)
+def delete_group():
+    print("DELETINGGGGGGGG")
+    username = request.params.get('username')
+    player = db(db.player.username == username).select().first()
+    print(player.group_id)
+    # grabbing all groups 
 
-@action('group_page', method=["GET", "POST"])
-@action.uses('group_page.html', url_signer, db, session, auth.user, url_signer.verify())
-def group_page():
- 
-    return dict()
+    print(username)
+
+    groups = db( (db.group.creator == username) & 
+                (db.group.id != player.group_id) ).select()
+    for group in groups:
+        print(group)
+        group_to_delete = db.group(group.id)  # Fetch the specific group to delete
+        group_to_delete.delete_record()  # Delete the group
+    return "ok"
+
 
 # @action('edit_meow', method="POST")
 # @action.uses(db, auth.user, url_signer.verify())
