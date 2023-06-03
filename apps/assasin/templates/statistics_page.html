@@ -1,0 +1,35 @@
+<h1>Player Statistics</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Player</th>
+      <th>Kills</th>
+      <th>Games Survived</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="statistic in statistics">
+      <td>{{ statistic.player.nickname }}</td>
+      <td>{{ statistic.kills }}</td>
+      <td>{{ statistic.games_survived }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Update Player Statistics</h2>
+<form action="[[=URL('statistics_page', signer=url_signer)]]" method="POST">
+  <label for="player_id">Player:</label>
+  <select name="player_id" id="player_id">
+    <option v-for="statistic in statistics" :value="statistic.player.id">
+      {{ statistic.player.nickname }}
+    </option>
+  </select>
+  <br />
+  <label for="kills">Kills:</label>
+  <input type="number" name="kills" id="kills" />
+  <br />
+  <label for="games_survived">Games Survived:</label>
+  <input type="number" name="games_survived" id="games_survived" />
+  <br />
+  <input type="submit" value="Update" />
+</form>
