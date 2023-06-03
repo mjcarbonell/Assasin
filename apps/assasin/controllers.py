@@ -64,8 +64,63 @@ def group_page():
         change_id_url = URL('change_id', signer=url_signer), 
         delete_group_url = URL('delete_group', signer=url_signer),
         url_signer=url_signer,
-
     )
+
+@action('game_page', method=["GET", "POST"])
+@action.uses('game_page.html', url_signer, db, session, auth.user, url_signer.verify())
+def game_page():
+    print("HEREEEE")
+    return dict(
+        get_users_url = URL('get_users', signer=url_signer),
+        get_groups_url = URL('get_groups', signer=url_signer),
+        create_group_url = URL('create_group', signer=url_signer),
+        change_id_url = URL('change_id', signer=url_signer), 
+        delete_group_url = URL('delete_group', signer=url_signer),
+        url_signer=url_signer,
+    )
+
+@action('statistics_page', method=["GET", "POST"])
+@action.uses('statistics_page.html', db, auth.user, url_signer.verify())
+def statistics_page():
+    if request.method == 'GET':
+        # Retrieve statistics for all players
+        players = db(db.player).select()
+        statistics = {}
+        for player in players:
+            player_statistics = db(
+                db.statistics.player_id == player.id).select().first()
+            if player_statistics:
+                statistics[player.id] = {
+                    'player': player,
+                    'kills': player_statistics.kills,
+                    'games_survived': player_statistics.games_survived
+                }
+            else:
+                statistics[player.id] = {
+                    'player': player,
+                    'kills': 0,
+                    'games_survived': 0
+                }
+
+        return dict(statistics=statistics, url_signer=url_signer)
+
+    elif request.method == 'POST':
+        # Handle form submission and update player statistics
+        player_id = int(request.forms.get('player_id'))
+        kills = int(request.forms.get('kills'))
+        games_survived = int(request.forms.get('games_survived'))
+
+        # Update player statistics in the database
+        db.statistics.update_or_insert(
+            (db.statistics.player_id == player_id),
+            player_id=player_id,
+            kills=kills,
+            games_survived=games_survived
+        )
+
+        # Redirect back to the statistics page
+        redirect(URL('statistics_page', signer=url_signer))
+
 
 # BACKEND FUNCTIONS 
 @action("get_users")
@@ -109,8 +164,7 @@ def create_group():
 @action.uses(db, auth.user, url_signer.verify())
 def change_id():
     id = request.json.get('id')
-    print("IDDD")
-    print(id)
+    
     currentUser = request.json.get('currentUser')
     player = db(db.player.username == currentUser).select().first()
 
@@ -120,7 +174,6 @@ def change_id():
     else:
         message = "Player not found"
     return dict(id=id, message="added player successfully")
-
 
 
 @action("add_player", method="POST")
@@ -134,18 +187,14 @@ def add_player():
 @action('delete_group')
 @action.uses(url_signer.verify(), db)
 def delete_group():
-    print("DELETINGGGGGGGG")
     username = request.params.get('username')
     player = db(db.player.username == username).select().first()
-    print(player.group_id)
     # grabbing all groups 
 
-    print(username)
 
     groups = db( (db.group.creator == username) & 
                 (db.group.id != player.group_id) ).select()
     for group in groups:
-        print(group)
         group_to_delete = db.group(group.id)  # Fetch the specific group to delete
         group_to_delete.delete_record()  # Delete the group
 

@@ -23,7 +23,11 @@
         <div class="group-wrapper">
             <a class="button" @click="add_yourself(group.id)">{{group.creator}}'s group</a>
             <span class="tag is-yellow">total players: {{group.total_players}}</span>
-            <button v-if="group.total_players >= 3 "class="button is-primary" @click="startGame(group.id)"> Start Game</button>
+            <a v-if="group.total_players >= 3" class="button is-primary " href="[[=URL('game_page', signer=url_signer)]]">
+                <span class="icon"></span> 
+                <span>Start Game</span>
+            </a>
+        
         </div>
         <template v-for="player in players">
             <h2 v-if="group.id === player.group_id">
@@ -33,13 +37,25 @@
             </h2>
         </template>
     </h2>
+
+      
+      
     
     <h1 style="margin-bottom: 20px;">&nbsp;</h1>
+    {{game_started}}
+    <a v-if="game_started == true" class="button is-primary " href="[[=URL('game_page', signer=url_signer)]]">
+        <span class="icon"></span> 
+        <span>go to current session</span>
+    </a>
 
     <h2> 
         <!-- we create a group and change the user's group id to new group -->
         <button class="button is-link" @click="create_group">create a group!</button>
     </h2>
+
+    <a class="button" href="[[=URL('statistics_page', signer=url_signer)]]">
+        <span class="icon">Go to statistics</span>
+    </a>
 
 </div>
 

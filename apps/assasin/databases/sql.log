@@ -49,3 +49,11 @@ CREATE TABLE "player"(
     "creation_date" TIMESTAMP
 );
 success!
+timestamp: 2023-06-03T14:02:32.966187
+CREATE TABLE "statistics"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "player_id" INTEGER REFERENCES "player" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "kills" INTEGER,
+    "games_survived" INTEGER
+);
+success!

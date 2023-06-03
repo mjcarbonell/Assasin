@@ -43,6 +43,12 @@ db.define_table(
     Field('creation_date', 'datetime', default=get_time),
 )
 
+db.define_table('statistics',
+                Field('player_id', 'reference player'),
+                Field('kills', 'integer', default=0),
+                Field('games_survived', 'integer', default=0)
+                )
+
 db.commit()
 
 # Comment out this line if you are not interested. 

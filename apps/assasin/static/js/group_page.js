@@ -13,6 +13,7 @@ let init = (app) => {
         currentUser: "", 
         inPlayers: false, 
         currentID: -99, 
+        game_started: false, 
     };    
     
     app.enumerate = (a) => {
@@ -118,12 +119,20 @@ let init = (app) => {
         console.log(app.vue.groups); 
         
     }
-
-
+    app.start_game = function () {
+        console.log('starting game'); 
+        Vue.set(app.vue, 'game_started', true); 
+    }
+    app.check_status = function () {
+        console.log("heya");
+        console.log(app.vue.game_started); 
+    }
     app.methods = {
         create_group: app.create_group, 
         add_yourself: app.add_yourself, 
         count_players: app.count_players,
+        start_game: app.start_game, 
+        check_status: app.check_status,
     };
 
     app.vue = new Vue({
@@ -147,9 +156,9 @@ let init = (app) => {
         setTimeout(function() {
             app.count_players();
         }, 1000);
+
+        setInterval(app.check_status(), 2000); 
        
-        
-        
     };
     app.init();
    
