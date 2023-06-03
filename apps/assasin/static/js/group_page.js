@@ -12,6 +12,7 @@ let init = (app) => {
         nickname: "", // current username 
         currentUser: "", 
         inPlayers: false, 
+        currentID: -99, 
     };    
     
     app.enumerate = (a) => {
@@ -32,6 +33,7 @@ let init = (app) => {
                     creator: app.vue.currentUser, 
                     id: response.data.id
                 }); 
+                Vue.set(app.vue, 'currentID', response.data.id);  
                 app.enumerate(app.vue.groups);
                 axios.post(change_id_url,
                     {
@@ -41,18 +43,22 @@ let init = (app) => {
                         for(let p of app.vue.players){
                             if(p.username == app.vue.currentUser){
                                 Vue.set(p, 'group_id', response.data.id);
-                                console.log("maybe done");
-                                console.log(app.vue.players);
                             }
                         }
                         axios.get(delete_group_url, {params: {username: app.vue.currentUser}}).then(function (response){
-                            console.log(response.message)
+                            // now find the old group 
+                            for(let g of app.vue.groups){
+                                if(g.creator==app.vue.currentUser && g.id != newResponse.data.id){
+                                    Vue.delete(app.vue.groups, g._idx);
+                                }
+                            }
+                            
                         })
 
                 })
 
                 // app.init(); // refreshing our players and groups. 
-                app.init(); 
+                app.vue.groups.push()
                 console.log("refresh")
                 console.log(app.vue.groups);
                 console.log(app.vue.players); 
@@ -71,6 +77,7 @@ let init = (app) => {
                 id: group_id,
                 currentUser: app.vue.currentUser,
             }).then(function (response){
+                Vue.set(app.vue, 'currentID', group_id); 
                 for(let p of app.vue.players){
                     if(p.username == app.vue.currentUser){
                         Vue.set(p, 'group_id', group_id);
@@ -78,13 +85,16 @@ let init = (app) => {
                 }
                 axios.get(delete_group_url, {params: {username: app.vue.currentUser}}).then(function (response){
                     console.log(response.message)
+                    // now find all groups that the user used to own. They do not own 
+                    // anything now that they are in a group 
+                    for(let g of app.vue.groups){
+                        if(g.creator==app.vue.currentUser){
+                            console.log("deleting")
+                            Vue.delete(app.vue.groups, g._idx);
+                        }
+                    }
                 })
-            // now find the old group 
-            for(let g of app.vue.groups){
-                if(g.creator==app.vue.currentUser){
-                    Vue.delete(app.vue.groups, g._idx);
-                }
-            }
+            
         })
 
     }
@@ -107,16 +117,15 @@ let init = (app) => {
             app.vue.players = app.enumerate(response.data.players);
             app.vue.currentUser = response.data.currentUser; 
         })
-
         axios.get(get_groups_url).then(function (response){
             app.vue.groups = app.enumerate(response.data.groups);
         })
+       
         
         
     };
     app.init();
-    console.log("groups here");
-    console.log(app.vue.groups); 
+   
 };
 
 

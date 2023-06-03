@@ -148,6 +148,7 @@ def delete_group():
         print(group)
         group_to_delete = db.group(group.id)  # Fetch the specific group to delete
         group_to_delete.delete_record()  # Delete the group
+
     return "ok"
 
 
