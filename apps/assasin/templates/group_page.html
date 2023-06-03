@@ -8,13 +8,23 @@
 
 <div class="section" id="vue-target" v-cloak>
 
-    <h1>this is the group page</h1>
+    <h1 class="title is-3 has-text-centered">
+        <img src="images/wizard.jpg" alt="Group Icon" class="group-icon" style="width: 200px; height: 200px;">
+        <span class="is-size-4">Group Page</span>
+    </h1>
+    <h1 class="tag is-link is-dark is-medium"> Must have 3 players in a group to start</h1>
+      
+    <h1 style="margin-bottom: 20px;">&nbsp;</h1>
 
 
 
     <h2 v-for="group in groups">
         <!-- SHOW ALL GROUPS with active creators HERE -->
-        <a class="button" @click="add_yourself(group.id)">{{group.creator}}'s group</a>
+        <div class="group-wrapper">
+            <a class="button" @click="add_yourself(group.id)">{{group.creator}}'s group</a>
+            <span class="tag is-yellow">total players: {{group.total_players}}</span>
+            <button v-if="group.total_players >= 3 "class="button is-primary" @click="startGame(group.id)"> Start Game</button>
+        </div>
         <template v-for="player in players">
             <h2 v-if="group.id === player.group_id">
                 <div>

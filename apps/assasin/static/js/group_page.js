@@ -53,16 +53,13 @@ let init = (app) => {
                                     app.enumerate(app.vue.groups); 
                                 }
                             }
+                            app.count_players(); 
                             
                         })
-
                 })
-
-                // app.init(); // refreshing our players and groups. 
-               
-                console.log("refresh")
-                console.log(app.vue.groups);
-                console.log(app.vue.players); 
+                // console.log("refresh")
+                // console.log(app.vue.groups);
+                // console.log(app.vue.players); 
                 // now we update the players adn 
             })
         // Great. Now the current User is assigned a new group 
@@ -96,16 +93,37 @@ let init = (app) => {
                             app.enumerate(app.vue.groups); 
                         }
                     }
+                    console.log(app.vue.groups);
+                    console.log(app.vue.players); 
                 })
-            
+            app.count_players(); 
         })
 
+    }
+    app.count_players = function () {
+        console.log(app.vue.groups);
+        console.log(app.vue.players);
+        for(let g of app.vue.groups){
+            Vue.set(g, 'total_players', 0); 
+            for(let p of app.vue.players){
+                if(parseInt(g.id) == parseInt(p.group_id)){
+                    newTotal = g.total_players + 1; 
+                    Vue.set(g, 'total_players', newTotal); 
+                    console.log("found one");
+                }
+            }
+        }
+
+        console.log("COUNTING")
+        console.log(app.vue.groups); 
+        
     }
 
 
     app.methods = {
         create_group: app.create_group, 
         add_yourself: app.add_yourself, 
+        count_players: app.count_players,
     };
 
     app.vue = new Vue({
@@ -123,6 +141,12 @@ let init = (app) => {
         axios.get(get_groups_url).then(function (response){
             app.vue.groups = app.enumerate(response.data.groups);
         })
+        // console.log(app.vue.players);
+        // console.log(app.vue.groups); 
+        
+        setTimeout(function() {
+            app.count_players();
+        }, 1000);
        
         
         
