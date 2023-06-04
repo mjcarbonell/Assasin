@@ -76,6 +76,8 @@ def game_page():
         create_group_url = URL('create_group', signer=url_signer),
         change_id_url = URL('change_id', signer=url_signer), 
         delete_group_url = URL('delete_group', signer=url_signer),
+        vote_player_url = URL('vote_player', signer=url_signer), 
+        set_inactive_url = URL('set_inactive', signer=url_signer),
         url_signer=url_signer,
     )
 
@@ -204,16 +206,51 @@ def delete_group():
 def set_active():
     group_id = request.json.get('group_id')
     groups = db(db.group).select()
+    players = db(db.player).select() 
+    temp = [] 
+    current_assasin = None 
+    for p in players: 
+        if p.group_id == group_id: 
+            temp.append(p.username)
+
+    if temp:
+        current_assasin = random.choice(temp)
+
     active_group = None 
     for g in groups: 
         if g.id == group_id: 
-            active_group = g 
             g.update_record(active=True)  # Update the group_id attribute of the player
+            g.update_record(current_assasin=current_assasin)
+            active_group = g 
         else: 
-            print("FALSE")
             g.update_record(active=False)
-    
     return dict(active_group=active_group)
+
+@action("set_inactive", method="POST")
+@action.uses(db, auth.user, url_signer.verify())
+def set_inactive():
+    group_id = request.json.get('group_id')
+    groups = db(db.group).select() 
+    for g in groups: 
+        if g.id == group_id: 
+            g.update_record(active=False) 
+    print("INACTIVE SUCCESS")
+    print(groups)
+    return dict(message="inactive success")
+
+
+@action("vote_player", method="POST")
+@action.uses(db, auth.user, url_signer.verify())
+def vote_player():
+    currentUser = request.json.get('currentUser') 
+    voted_player = request.json.get('voted_player')
+    players = db(db.player).select()
+    for p in players: 
+        if p.username == currentUser: 
+            p.update_record(vote=voted_player)
+
+    return dict(message="voted_played succesfully")
+
        
 
 # @action('edit_meow', method="POST")

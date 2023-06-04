@@ -60,3 +60,36 @@ success!
 timestamp: 2023-06-03T14:44:51.185624
 ALTER TABLE "group" ADD "active" CHAR(1);
 success!
+timestamp: 2023-06-03T18:20:09.975720
+ALTER TABLE "player" ADD "votes" INTEGER;
+success!
+timestamp: 2023-06-03T18:29:52.313336
+ALTER TABLE "player" ADD "vote" CHAR(512);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!

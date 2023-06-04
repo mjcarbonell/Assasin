@@ -41,6 +41,7 @@ db.define_table(
     Field('group_id', 'reference group'),
     Field('wins'),
     Field('last_word'),
+    Field('vote', 'reference player'),
     Field('creation_date', 'datetime', default=get_time),
 )
 

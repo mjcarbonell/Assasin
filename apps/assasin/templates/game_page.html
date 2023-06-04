@@ -9,12 +9,39 @@
 <div class="section" id="vue-target" v-cloak>
     <h1 class="title is-3 has-text-centered">
         <img src="images/fighting.gif" alt="Group Icon" class="group-icon" style="width: 200px; height: 200px;">
-        <span class="is-size-4">Group Page</span>
     </h1>
-    <h1>current game session : "insert group creator's name here" </h1>
-    <h2> everyone else who joins is a spectator who is not in the current group</h2>
-    <h1 class="tag is-link is-dark is-medium"> Quick! You have 30 seconds to submit your last words</h1>
+    <h1 class="title is-3 has-text-centered" v-if="active_group==null">Looks like there is no active group...</h1>
+
+
+    <template v-if="game_ended==false && active_group!=null"> 
+        <h1 class="title is-3 has-text-centered" v-if="active_group!=null">current game session : {{active_group.creator}}'s group </h1>
+        <h1 class="title is-4 has-text-centered ">30 seconds until a winner is crowned</h1>
+        <h1 class="title is-4 has-text-centered ">click on someone's name to vote them as the assasin</h1>
+    </template>
+    <template v-if="game_ended==true">
+        <h1>game has ended! </h1>
+        <h1 style="margin-bottom: 20px;">&nbsp;</h1>
+        <h1>{{killed}} was killed</h1> 
+    </template>
+
+    <h1 style="margin-bottom: 20px;">&nbsp;</h1>
+    
+    <h1 v-if="winner==current_assasin"> The assasin, {{current_assasin}} wins!</h1>
+    <h1 v-if="winner!=Bystanders">Bystanders win!</h1>
+    <h1 class="title is-4 has-text-centered" v-if="game_ended==false && active_group!=null">{{timer}}</h1>
+    <template v-if="game_ended == false">
+        <template v-for="player in players" v-if="player.group_id==active_group.id">
+            <a class="button tag is-info" @click="vote(player.id)">{{player.nickname}}</a>
+            <h1 style="margin-bottom: 10px;">&nbsp;</h1>
+        </template>
+    </template>
+
+    <a v-if="game_ended==true" class="button is-primary " href="[[=URL('group_page', signer=url_signer)]]">
+        <span class="icon"></span> 
+        <span>Back to groups!</span>
+    </a>
 </div>
+
 
 [[block page_scripts]]
 <!-- Loads the index-specific js for Vue -->
@@ -24,6 +51,8 @@
   let create_group_url = "[[=XML(create_group_url)]]"; 
   let change_id_url = "[[=XML(change_id_url)]]"; 
   let delete_group_url = "[[=XML(delete_group_url)]]"; 
+  let vote_player_url = "[[=XML(vote_player_url)]]";
+  let set_inactive_url = "[[=XML(set_inactive_url)]]"; 
 </script>
 
 <script src="js/game_page.js"></script>

@@ -133,17 +133,24 @@ let init = (app) => {
         Vue.set(app.vue, 'game_started', true); 
     }
     app.check_status = function() {
-        temp = []; 
+        let temp = []; 
         axios.get(get_groups_url).then(function (response){
             temp = app.enumerate(response.data.groups);
             for(let g of temp){
                 if(g.active==true){
                     Vue.set(app.vue, 'active_group', g); 
+                    // console.log("active group");
+                    // console.log(app.vue.active_group); 
+                    break; 
+                }
+                else{
+                    Vue.set(app.vue, 'active_group', null); 
+                    // console.log("check status"); 
+                    // console.log(app.vue.active_group); 
                 }
             }
+            // if we checked all groups and none were active we do not have an active_group
         })
-        console.log(app.vue.active_group); 
-        
     }
    
     app.methods = {
