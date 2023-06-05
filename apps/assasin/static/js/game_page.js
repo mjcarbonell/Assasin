@@ -19,6 +19,7 @@ let init = (app) => {
         killed: null, 
         winner: null,
         current_assasin: null, 
+        has_added: false, 
     };    
     
     app.enumerate = (a) => {
@@ -83,8 +84,16 @@ let init = (app) => {
                                 if (p.username == app.vue.current_assasin){
                                     Vue.set(app.vue, 'winner', "Bystanders"); 
                                 } 
-                                else{
+                                else{ // if assasin wins they get +1 win 
                                     Vue.set(app.vue, 'winner', app.vue.current_assasin); 
+                                    axios.post(add_win_url, 
+                                        {
+                                            winner: app.vue.current_assasin,
+                                        }).then(function (thirdResponse){
+                                            console.log('success added vote');
+                                    })
+                                    // console.log("WINNER"); 
+                                    // console.log(p); 
                                 }
                             }
                         }
@@ -115,6 +124,7 @@ let init = (app) => {
             return; 
         }
     }
+   
 
     app.methods = {
         check_status: app.check_status, 

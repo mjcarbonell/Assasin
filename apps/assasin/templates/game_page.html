@@ -10,7 +10,7 @@
     <h1 class="title is-3 has-text-centered">
         <img src="images/fighting.gif" alt="Group Icon" class="group-icon" style="width: 200px; height: 200px;">
     </h1>
-    <h1 class="title is-3 has-text-centered" v-if="active_group==null">Looks like there is no active group...</h1>
+    <h1 class="title is-3 has-text-centered" v-if="active_group==null">no active group at this time...</h1>
 
 
     <template v-if="game_ended==false && active_group!=null"> 
@@ -19,15 +19,15 @@
         <h1 class="title is-4 has-text-centered ">click on someone's name to vote them as the assasin</h1>
     </template>
     <template v-if="game_ended==true">
-        <h1>game has ended! </h1>
+        <h1 class="title is-3 has-text-centered">game has ended! </h1>
         <h1 style="margin-bottom: 20px;">&nbsp;</h1>
-        <h1>{{killed}} was killed</h1> 
+        <h1 class="title is-3 has-text-centered">{{killed}} was killed</h1> 
     </template>
 
     <h1 style="margin-bottom: 20px;">&nbsp;</h1>
     
-    <h1 v-if="winner==current_assasin"> The assasin, {{current_assasin}} wins!</h1>
-    <h1 v-if="winner!=Bystanders">Bystanders win!</h1>
+    <h1 v-if="winner==current_assasin && game_ended==true" class="title is-3 has-text-centered"> The assasin, {{current_assasin}} wins!</h1>
+    <h1 v-if="winner!=current_assasin && game_ended==true" class="title is-3 has-text-centered">Bystanders win!</h1>
     <h1 class="title is-4 has-text-centered" v-if="game_ended==false && active_group!=null">{{timer}}</h1>
     <template v-if="game_ended == false">
         <template v-for="player in players" v-if="player.group_id==active_group.id">
@@ -38,7 +38,7 @@
 
     <a v-if="game_ended==true" class="button is-primary " href="[[=URL('group_page', signer=url_signer)]]">
         <span class="icon"></span> 
-        <span>Back to groups!</span>
+        <span>Back to groups</span>
     </a>
 </div>
 
@@ -53,6 +53,7 @@
   let delete_group_url = "[[=XML(delete_group_url)]]"; 
   let vote_player_url = "[[=XML(vote_player_url)]]";
   let set_inactive_url = "[[=XML(set_inactive_url)]]"; 
+  let add_win_url = "[[=XML(add_win_url)]]"; 
 </script>
 
 <script src="js/game_page.js"></script>

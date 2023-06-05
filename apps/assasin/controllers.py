@@ -78,6 +78,7 @@ def game_page():
         delete_group_url = URL('delete_group', signer=url_signer),
         vote_player_url = URL('vote_player', signer=url_signer), 
         set_inactive_url = URL('set_inactive', signer=url_signer),
+        add_win_url = URL('add_win', signer=url_signer), 
         url_signer=url_signer,
     )
 
@@ -234,8 +235,6 @@ def set_inactive():
     for g in groups: 
         if g.id == group_id: 
             g.update_record(active=False) 
-    print("INACTIVE SUCCESS")
-    print(groups)
     return dict(message="inactive success")
 
 
@@ -250,6 +249,24 @@ def vote_player():
             p.update_record(vote=voted_player)
 
     return dict(message="voted_played succesfully")
+
+@action("add_win", method="POST")
+@action.uses(db, auth.user, url_signer.verify())
+def add_win():
+    winner = request.json.get('winner') 
+    players = db(db.player).select() 
+    print("WINNNER"); 
+    print(winner); 
+    for p in players: 
+        if p.username == winner: 
+            print("ADDDING win")
+            if(p.wins==None): 
+                p.update_record(wins=1)
+            else: 
+                p.update_record(wins=int(p.wins) + 1)
+    return dict(message="winner gets another win")
+
+
 
        
 
