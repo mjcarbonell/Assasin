@@ -1,7 +1,6 @@
 
 let app = {};
 
-
 let init = (app) => {
 
     // This is the Vue data.
@@ -130,7 +129,6 @@ let init = (app) => {
         }
     }
    
-
     app.methods = {
         check_status: app.check_status, 
         start_timer: app.start_timer, 
@@ -156,10 +154,8 @@ let init = (app) => {
                 setInterval(app.check_status, 1000); 
                 Vue.set(app.vue, 'timer', 30); 
                 setInterval(app.start_timer, 1000); 
-
             })
         })
-        
     };
     app.init();
 
