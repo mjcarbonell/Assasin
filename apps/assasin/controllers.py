@@ -91,47 +91,6 @@ def game_page():
 @action('statistics_page', method=["GET", "POST"])
 @action.uses('statistics_page.html', db, auth.user, url_signer.verify())
 def statistics_page():
-    if request.method == 'GET':
-        # Retrieve statistics for all players
-        players = db(db.player).select()
-        statistics = []
-        for player in players:
-            player_statistics = db.statistics(player_id=player.id)
-            if player_statistics:
-                statistics.append({
-                    'player': player,
-                    'kills': player_statistics.kills,
-                    'games_survived': player_statistics.games_survived
-                })
-            else:
-                statistics.append({
-                    'player': player,
-                    'kills': 0,
-                    'games_survived': 0
-                })
-
-        # Sort statistics by kills in descending order
-        leaderboard = sorted(
-            statistics, key=lambda s: s['kills'], reverse=True)
-
-        return dict(statistics=statistics, leaderboard=leaderboard)
-
-    elif request.method == 'POST':
-        # Handle form submission and update player statistics
-        player_id = int(request.forms.get('player_id'))
-        kills = int(request.forms.get('kills'))
-        games_survived = int(request.forms.get('games_survived'))
-
-        # Update player statistics in the database
-        db.statistics.update_or_insert(
-            (db.statistics.player_id == player_id),
-            player_id=player_id,
-            kills=kills,
-            games_survived=games_survived
-        )
-
-        # Redirect to the statistics page after updating
-        redirect(URL('statistics_page', signer=url_signer))
 
     return dict(
         get_users_url=URL('get_users', signer=url_signer),

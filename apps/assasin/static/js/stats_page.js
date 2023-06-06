@@ -1,64 +1,146 @@
 let app = {};
 
 let init = (app) => {
+  // This is the Vue data.
   app.data = {
-    statistics: [],
-    leaderboard: [],
+    rows: [], // rows are the auth.users in the database
     players: [],
-    currentPlayerID: null,
-    currentPlayerKills: 0,
-    currentPlayerGamesSurvived: 0,
+    groups: [],
+    nickname: "", // current username
+    currentUser: "",
+  };
+
+  app.enumerate = (a) => {
+    // This adds an _idx field to each element of the array.
+    let k = 0;
+    a.map((e) => {
+      e._idx = k++;
+    });
+    return a;
+  };
+  app.check_status = function () {
+    let temp = [];
+    axios.get(get_groups_url).then(function (response) {
+      temp = app.enumerate(response.data.groups);
+      for (let g of temp) {
+        if (g.active == true) {
+          Vue.set(app.vue, "active_group", g);
+          Vue.set(
+            app.vue,
+            "current_assasin",
+            app.vue.active_group.current_assasin
+          );
+          break;
+        } else {
+          Vue.set(app.vue, "active_group", null);
+        }
+      }
+      // console.log("HI")
+      // console.log(app.vue.active_group);
+    });
+  };
+  app.start_timer = function () {
+    // we subtract 1 and it is called every second
+    // we end the game and set the active group back to null if timer is 0
+    let temp = []; // will hold copy of players most recent votes
+    let total = [];
+    let available_ids = [];
+    if (app.vue.timer == 0 && app.vue.active_group != null) {
+      axios
+        .post(set_inactive_url, {
+          group_id: app.vue.active_group.id,
+        })
+        .then(function (response) {
+          // setting group inactive and game_ended to true
+          Vue.set(app.vue, "active_group", null);
+          Vue.set(app.vue, "game_ended", true);
+          axios.get(get_users_url).then(function (newResponse) {
+            temp = newResponse.data.players;
+            for (let p of temp) {
+              total.push(p.vote);
+              available_ids.push(p.id);
+            }
+            // Assuming 'total' is an array of votes and 'available_ids' is an array of available IDs
+            total = total.filter((vote) => available_ids.includes(vote));
+            // console.log("AVAILABLE IDS: ", available_ids);
+            // console.log(total);
+            let result = total.reduce((acc, num) => {
+              if (num != null) {
+                acc[num] = (acc[num] || 0) + 1;
+              }
+              return acc;
+            }, {});
+            result = Object.keys(result).reduce((a, b) =>
+              result[a] > result[b] ? a : b
+            );
+            for (let p of app.vue.players) {
+              if (p.id == result) {
+                // killing most voted player
+                Vue.set(app.vue, "killed", p.nickname);
+                if (p.username == app.vue.current_assasin) {
+                  Vue.set(app.vue, "winner", "Bystanders");
+                } else {
+                  Vue.set(app.vue, "winner", app.vue.current_assasin);
+                }
+              }
+            }
+          });
+        });
+    } else {
+      if (app.vue.timer > 0) {
+        Vue.set(app.vue, "timer", app.vue.timer - 1);
+      }
+    }
+  };
+  app.vote = function (voted_player) {
+    // if user refreshes than they have to wait 30 seconds again
+    if (app.vue.timer > 0 && app.vue.active_group != null) {
+      // player can vot if timer is not zero and active group is still active
+      console.log("voting");
+      console.log(voted_player);
+      axios
+        .post(vote_player_url, {
+          voted_player: voted_player,
+          currentUser: app.vue.currentUser,
+        })
+        .then(function (response) {
+          console.log(response.voted_player);
+        });
+      return;
+    } else {
+      return;
+    }
   };
 
   app.methods = {
-    updateStatistics: function () {
-      axios
-        .get(get_statistics_url)
-        .then(function (response) {
-          app.vue.statistics = response.data.statistics;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
-
-    updateLeaderboard: function () {
-      axios
-        .get(get_leaderboard_url)
-        .then(function (response) {
-          app.vue.leaderboard = response.data.leaderboard;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
-
-    submitUpdateForm: function () {
-      axios
-        .post(update_statistics_url, {
-          player_id: app.vue.currentPlayerID,
-          kills: app.vue.currentPlayerKills,
-          games_survived: app.vue.currentPlayerGamesSurvived,
-        })
-        .then(function (response) {
-          app.methods.updateStatistics();
-          app.methods.updateLeaderboard();
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
+    check_status: app.check_status,
+    start_timer: app.start_timer,
+    vote: app.vote,
   };
 
   app.vue = new Vue({
-    el: "#app",
-    delimiters: ["[[", "]]"],
+    el: "#vue-target",
     data: app.data,
     methods: app.methods,
   });
 
-  app.methods.updateStatistics();
-  app.methods.updateLeaderboard();
+  app.init = () => {
+    axios.get(get_users_url).then(function (response) {
+      // FIRST THEN
+      app.vue.rows = app.enumerate(response.data.rows);
+      app.vue.players = app.enumerate(response.data.players);
+      app.vue.currentUser = response.data.currentUser;
+      axios.get(get_groups_url).then(function (response) {
+        //SECOND THEN
+        app.vue.groups = app.enumerate(response.data.groups);
+        console.log("PLAYERS");
+        console.log(app.vue.players);
+        console.log("GROUPS");
+        console.log(app.vue.groups);
+      });
+    });
+  };
+  app.init();
 };
 
 init(app);
