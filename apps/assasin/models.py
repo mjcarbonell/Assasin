@@ -21,41 +21,6 @@ def get_time():
     return datetime.datetime.utcnow()
 
 
-# Define your table below
-#
-# db.define_table('thing', Field('name'))
-#
-# always commit your models to avoid problems later
-
-
-db.define_table(
-    'group',
-    Field('creator'),
-    Field('current_assasin'),
-    Field('winner'),  # this can either be bystanders or the username of the assasin
-    Field('players', 'list:string'),
-    Field('active', 'boolean', default=False)
-)
-db.define_table(
-    'player',
-    Field('username'),
-    Field('nickname'),
-    Field('group_id', 'reference group'),
-    Field('wins'),
-    Field('last_word'),
-    Field('vote', 'reference player'),
-    Field('creation_date', 'datetime', default=get_time),
-)
-
-db.define_table('statistics',
-                Field('player_id', 'reference player'),
-                Field('kills', 'integer', default=0),
-                Field('games_survived', 'integer', default=0)
-                )
-
-db.commit()
-
-
 def get_nickname(player_id):
     player = db(db.player.id == player_id).select().first()
     return player.nickname if player else ''
@@ -85,3 +50,31 @@ def update_statistics(player_id, kills, games_survived):
 def get_players():
     players = db(db.player).select()
     return players
+
+
+db.define_table(
+    'group',
+    Field('creator'),
+    Field('current_assasin'),
+    Field('winner'),  # this can either be bystanders or the username of the assasin
+    Field('players', 'list:string'),
+    Field('active', 'boolean', default=False)
+)
+db.define_table(
+    'player',
+    Field('username'),
+    Field('nickname'),
+    Field('group_id', 'reference group'),
+    Field('wins'),
+    Field('last_word'),
+    Field('vote', 'reference player'),
+    Field('creation_date', 'datetime', default=get_time),
+)
+
+db.define_table('statistics',
+                Field('player_id', 'reference player'),
+                Field('kills', 'integer', default=0),
+                Field('games_survived', 'integer', default=0)
+                )
+
+db.commit()

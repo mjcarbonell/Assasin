@@ -94,28 +94,27 @@ def statistics_page():
     if request.method == 'GET':
         # Retrieve statistics for all players
         players = db(db.player).select()
-        statistics = {}
+        statistics = []
         for player in players:
-            player_statistics = db(
-                db.statistics.player_id == player.id).select().first()
+            player_statistics = db.statistics(player_id=player.id)
             if player_statistics:
-                statistics[player.id] = {
+                statistics.append({
                     'player': player,
                     'kills': player_statistics.kills,
                     'games_survived': player_statistics.games_survived
-                }
+                })
             else:
-                statistics[player.id] = {
+                statistics.append({
                     'player': player,
                     'kills': 0,
                     'games_survived': 0
-                }
+                })
 
         # Sort statistics by kills in descending order
         leaderboard = sorted(
-            statistics.values(), key=lambda s: s['kills'], reverse=True)
+            statistics, key=lambda s: s['kills'], reverse=True)
 
-        return dict(statistics=statistics, leaderboard=leaderboard, url_signer=url_signer)
+        return dict(statistics=statistics, leaderboard=leaderboard)
 
     elif request.method == 'POST':
         # Handle form submission and update player statistics
@@ -133,6 +132,17 @@ def statistics_page():
 
         # Redirect to the statistics page after updating
         redirect(URL('statistics_page', signer=url_signer))
+
+    return dict(
+        get_users_url=URL('get_users', signer=url_signer),
+        add_player_url=URL('add_player', signer=url_signer),
+        get_groups_url=URL('get_groups', signer=url_signer),
+        create_group_url=URL('create_group', signer=url_signer),
+        change_id_url=URL('change_id', signer=url_signer),
+        delete_group_url=URL('delete_group', signer=url_signer),
+        set_active_url=URL('set_active', signer=url_signer),
+        url_signer=url_signer,
+    )
 
 
 # BACKEND FUNCTIONS
@@ -269,8 +279,3 @@ def vote_player():
             p.update_record(vote=voted_player)
 
     return dict(message="voted_played succesfully")
-
-
-# @action('edit_meow', method="POST")
-# @action.uses(db, auth.user, url_signer.verify())
-# def edit_meow

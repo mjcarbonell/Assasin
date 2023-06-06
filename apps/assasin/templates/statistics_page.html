@@ -1,51 +1,84 @@
-<h1>Player Statistics</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Player</th>
-      <th>Kills</th>
-      <th>Games Survived</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="statistic in statistics">
-      <td>[[=statistics.player_id.nickname]]</td>
-      <td>[[=statistics.kills]]</td>
-      <td>[[=statistics.games_survived]]</td>
-    </tr>
-  </tbody>
-</table>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Statistics Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="stats_page.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Player Statistics -->
+      <h2>Player Statistics</h2>
+      <table>
+        <tr>
+          <th>Player</th>
+          <th>Kills</th>
+          <th>Games Survived</th>
+        </tr>
+        <tr v-for="statistic in statistics">
+          <td>{{ statistic.player.nickname }}</td>
+          <td>{{ statistic.kills }}</td>
+          <td>{{ statistic.games_survived }}</td>
+        </tr>
+      </table>
 
-<h2>Update Player Statistics</h2>
-<form action="[[=URL('statistics_page', signer=url_signer)]]" method="POST">
-  <label for="player_id">Player:</label>
-  <select name="player_id" id="player_id">
-    <option v-for="player in players" :value="player.id">
-      [[=player.nickname]]
-    </option>
-  </select>
-  <br />
-  <label for="kills">Kills:</label>
-  <input type="number" name="kills" id="kills" />
-  <br />
-  <label for="games_survived">Games Survived:</label>
-  <input type="number" name="games_survived" id="games_survived" />
-  <br />
-  <input type="submit" value="Update" />
-</form>
+      <!-- Update Player Statistics Form -->
+      <h2>Update Player Statistics</h2>
+      <form @submit.prevent="submitUpdateForm">
+        <label for="player-select">Player:</label>
+        <select id="player-select" v-model="currentPlayerID">
+          <option v-for="player in players" :value="player.id">
+            {{ player.nickname }}
+          </option>
+        </select>
+        <br />
+        <label for="kills-input">Kills:</label>
+        <input
+          id="kills-input"
+          type="number"
+          v-model.number="currentPlayerKills"
+        />
+        <br />
+        <label for="games-survived-input">Games Survived:</label>
+        <input
+          id="games-survived-input"
+          type="number"
+          v-model.number="currentPlayerGamesSurvived"
+        />
+        <br />
+        <button type="submit">Update Statistics</button>
+      </form>
 
-<h2>Leaderboard</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Player</th>
-      <th>Kills</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="statistic in leaderboard">
-      <td>[[=statistics.player_id.nickname]]</td>
-      <td>[[=statistics.kills]]</td>
-    </tr>
-  </tbody>
-</table>
+      <!-- Leaderboard -->
+      <h2>Leaderboard</h2>
+      <table>
+        <tr>
+          <th>Player</th>
+          <th>Kills</th>
+        </tr>
+        <tr v-for="player in leaderboard">
+          <td>{{ player.player.nickname }}</td>
+          <td>{{ player.kills }}</td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
+
+[[block page_scripts]]
+<!-- Loads the index-specific js for Vue -->
+<script>
+  let get_users_url = "{{=XML(get_users_url}}";
+  let get_groups_url = "{{=XML(get_groups_url)}}";
+  let create_group_url = "{{=XML(create_group_url)}}";
+  let change_id_url = "{{=XML(change_id_url)}}";
+  let delete_group_url = "{{=XML(delete_group_url)}}";
+  let vote_player_url = "{{=XML(vote_player_url)}}";
+  let set_inactive_url = "{{=XML(set_inactive_url)}}";
+</script>
+
+<script src="js/stats_page.js"></script>
+[[end]]
