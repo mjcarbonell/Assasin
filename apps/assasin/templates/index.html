@@ -18,12 +18,16 @@
   </div>
   <div v-else> 
     welcome back! 
-    "edit profile button here"
+    <h1 style="margin-bottom: 10px;">&nbsp;</h1>
+    <a class="button is-primary" href="[[=URL('statistics_page', signer=url_signer)]]">
+      <span class="icon"></span>
+      <span>Go to statistics</span>
+    </a>
   </div>
 
   <h1 style="margin-bottom: 20px;">&nbsp;</h1>
 
-    <a class="button" href="[[=URL('group_page', signer=url_signer)]]">
+    <a class="button is-primary" href="[[=URL('group_page', signer=url_signer)]]">
       <span class="icon"></span> 
       <span>Go to group</span>
     </a>

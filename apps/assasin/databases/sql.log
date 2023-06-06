@@ -1,4 +1,4 @@
-timestamp: 2023-06-02T17:54:38.617414
+timestamp: 2023-06-05T19:41:18.695480
 CREATE TABLE "py4web_session"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "rkey" CHAR(512),
@@ -8,7 +8,7 @@ CREATE TABLE "py4web_session"(
     "expires_on" TIMESTAMP
 );
 success!
-timestamp: 2023-06-02T17:54:38.637043
+timestamp: 2023-06-05T19:41:18.719695
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "username" CHAR(512) UNIQUE,
@@ -22,192 +22,41 @@ CREATE TABLE "auth_user"(
     "past_passwords_hash" TEXT
 );
 success!
-timestamp: 2023-06-02T17:54:38.642673
+timestamp: 2023-06-05T19:41:18.738570
 CREATE TABLE "auth_user_tag_groups"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "tagpath" CHAR(512),
     "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  
 );
 success!
-timestamp: 2023-06-02T17:54:38.650142
+timestamp: 2023-06-05T19:41:18.757226
 CREATE TABLE "group"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "creator" CHAR(512),
     "current_assasin" CHAR(512),
     "winner" CHAR(512),
-    "players" TEXT
+    "players" TEXT,
+    "bot" CHAR(1),
+    "active" CHAR(1)
 );
 success!
-timestamp: 2023-06-02T17:54:38.655448
+timestamp: 2023-06-05T19:41:18.769716
 CREATE TABLE "player"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "username" CHAR(512),
     "nickname" CHAR(512),
     "group_id" INTEGER REFERENCES "group" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
-    "wins" CHAR(512),
+    "wins" INTEGER,
     "last_word" CHAR(512),
+    "vote" INTEGER REFERENCES "player" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
     "creation_date" TIMESTAMP
 );
 success!
-timestamp: 2023-06-03T14:02:32.966187
+timestamp: 2023-06-05T19:41:18.781574
 CREATE TABLE "statistics"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "player_id" INTEGER REFERENCES "player" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
     "kills" INTEGER,
     "games_survived" INTEGER
 );
-success!
-timestamp: 2023-06-03T14:44:51.185624
-ALTER TABLE "group" ADD "active" CHAR(1);
-success!
-timestamp: 2023-06-03T18:20:09.975720
-ALTER TABLE "player" ADD "votes" INTEGER;
-success!
-timestamp: 2023-06-03T18:29:52.313336
-ALTER TABLE "player" ADD "vote" CHAR(512);
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
 success!

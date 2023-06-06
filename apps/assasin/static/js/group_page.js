@@ -138,7 +138,19 @@ let init = (app) => {
             temp = app.enumerate(response.data.groups);
             for(let g of temp){
                 if(g.active==true){
-                    Vue.set(app.vue, 'active_group', g); 
+                    for(let group of app.vue.groups){
+                        if (group.id == g.id){
+                            console.log("players: ", group.total_players);
+                            if(group.total_players >=3 ){
+                                // console.log("enough: ", enoughPlayers); 
+                                Vue.set(app.vue, 'active_group', g); 
+                                return; 
+                            }
+                            else{
+                                Vue.set(app.vue, 'active_group', null); 
+                            }
+                        }
+                    }
                     // console.log("active group");
                     // console.log(app.vue.active_group); 
                     break; 

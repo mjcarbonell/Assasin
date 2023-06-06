@@ -20,6 +20,8 @@ let init = (app) => {
         current_assasin: null, 
         has_added: false, 
         called_once: false, 
+        assasin_nickname: null, 
+        vote_clicked: false, 
     };    
     
     app.enumerate = (a) => {
@@ -36,6 +38,11 @@ let init = (app) => {
                 if(g.active==true){
                     Vue.set(app.vue, 'active_group', g); 
                     Vue.set(app.vue, 'current_assasin', app.vue.active_group.current_assasin); 
+                    for(let p of app.vue.players){
+                        if(p.username == app.vue.current_assasin){
+                            Vue.set(app.vue, 'assasin_nickname', p.nickname); 
+                        }
+                    }
                     break; 
                 }
                 else{
@@ -110,8 +117,9 @@ let init = (app) => {
             }
         }
     }
-    app.vote = function (voted_player) { // if user refreshes than they have to wait 30 seconds again 
+    app.vote = function (voted_player, vote_nickname) { // if user refreshes than they have to wait 30 seconds again 
         if (app.vue.timer > 0 && app.vue.active_group != null){ 
+            Vue.set(app.vue, 'vote_clicked', true); 
             // player can vot if timer is not zero and active group is still active 
             console.log("voting");
             console.log(voted_player); 
@@ -120,6 +128,12 @@ let init = (app) => {
                     voted_player: voted_player,
                     currentUser: app.vue.currentUser,
                 }).then(function (response){
+                    console.log("THENNN"); 
+                    for(let p of app.vue.players){
+                        if(p.username == app.vue.currentUser){
+                            Vue.set(p, 'vote', vote_nickname); 
+                        }
+                    }
                     console.log(response.voted_player); 
             })
             return; 
@@ -147,6 +161,9 @@ let init = (app) => {
             // FIRST THEN 
             app.vue.rows = app.enumerate(response.data.rows); 
             app.vue.players = app.enumerate(response.data.players);
+            for(let p of app.vue.players){
+                Vue.set(p, 'vote', null); 
+            }
             app.vue.currentUser = response.data.currentUser; 
             axios.get(get_groups_url).then(function (response){
                 //SECOND THEN 

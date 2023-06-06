@@ -12,7 +12,6 @@
     </h1>
     <h1 class="title is-3 has-text-centered" v-if="active_group==null">no active group at this time...</h1>
 
-
     <template v-if="game_ended==false && active_group!=null"> 
         <h1 class="title is-3 has-text-centered" v-if="active_group!=null">current game session : {{active_group.creator}}'s group </h1>
         <h1 class="title is-4 has-text-centered ">30 seconds until a winner is crowned</h1>
@@ -25,13 +24,15 @@
     </template>
 
     <h1 style="margin-bottom: 20px;">&nbsp;</h1>
-    
+
+
     <h1 v-if="winner==current_assasin && game_ended==true" class="title is-3 has-text-centered"> The assasin, {{current_assasin}} wins!</h1>
-    <h1 v-if="winner!=current_assasin && game_ended==true" class="title is-3 has-text-centered">Bystanders win!</h1>
+    <h1 v-if="winner!=current_assasin && game_ended==true" class="title is-3 has-text-centered">Bystanders win! the assasin was {{assasin_nickname}}</h1>
     <h1 class="title is-4 has-text-centered" v-if="game_ended==false && active_group!=null">{{timer}}</h1>
     <template v-if="game_ended == false">
         <template v-for="player in players" v-if="player.group_id==active_group.id">
-            <a class="button tag is-info" @click="vote(player.id)">{{player.nickname}}</a>
+            <a class="button tag is-info" @click="vote(player.id, player.nickname)">{{player.nickname}}</a>
+            <span v-if="player.username == currentUser"> vote casted: {{player.vote}}</span>
             <h1 style="margin-bottom: 10px;">&nbsp;</h1>
         </template>
     </template>

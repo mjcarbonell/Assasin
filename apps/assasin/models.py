@@ -32,7 +32,8 @@ db.define_table(
     Field('current_assasin'),
     Field('winner'), # this can either be bystanders or the username of the assasin
     Field('players', 'list:string'), 
-    Field('active', 'boolean', default=False)
+    Field('bot', 'boolean', default=False),
+    Field('active', 'boolean', default=False),
 )
 db.define_table(
     'player',
@@ -56,11 +57,19 @@ def add_users_for_testing():
     print("Adding user") 
     first_name = random.choice(FIRST_NAMES)
     last_name = first_name = random.choice(LAST_NAMES)
-    group_id = db.group.insert(creator=first_name)
+    group_id = db.group.insert(creator=first_name, bot=True)
     db.player.insert(username=first_name, nickname=last_name, group_id=group_id)
+    for i in range(1): 
+        db.player.insert(
+            username=random.choice(FIRST_NAMES), 
+            nickname=random.choice(LAST_NAMES), 
+            group_id=group_id
+        ) 
 
 
-# add_users_for_testing() 
+add_users_for_testing() 
+add_users_for_testing()
+
 db.commit()
 
 # Comment out this line if you are not interested. 
