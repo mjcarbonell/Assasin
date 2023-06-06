@@ -85,45 +85,12 @@ def game_page():
 @action('statistics_page', method=["GET", "POST"])
 @action.uses('statistics_page.html', db, auth.user, url_signer.verify())
 def statistics_page():
-    if request.method == 'GET':
-        # Retrieve statistics for all players
-        players = db(db.player).select()
-        statistics = {}
-        for player in players:
-            player_statistics = db(
-                db.statistics.player_id == player.id).select().first()
-            if player_statistics:
-                statistics[player.id] = {
-                    'player': player,
-                    'kills': player_statistics.kills,
-                    'games_survived': player_statistics.games_survived
-                }
-            else:
-                statistics[player.id] = {
-                    'player': player,
-                    'kills': 0,
-                    'games_survived': 0
-                }
 
-        return dict(statistics=statistics, url_signer=url_signer)
-
-    elif request.method == 'POST':
-        # Handle form submission and update player statistics
-        player_id = int(request.forms.get('player_id'))
-        kills = int(request.forms.get('kills'))
-        games_survived = int(request.forms.get('games_survived'))
-
-        # Update player statistics in the database
-        db.statistics.update_or_insert(
-            (db.statistics.player_id == player_id),
-            player_id=player_id,
-            kills=kills,
-            games_survived=games_survived
-        )
-
-        # Redirect back to the statistics page
-        redirect(URL('statistics_page', signer=url_signer))
-
+    return dict(
+        get_users_url=URL('get_users', signer=url_signer),
+        get_groups_url=URL('get_groups', signer=url_signer),
+        url_signer=url_signer,
+    )
 
 # BACKEND FUNCTIONS 
 @action("get_users")

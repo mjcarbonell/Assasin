@@ -52,7 +52,6 @@ db.define_table('statistics',
                 Field('games_survived', 'integer', default=0)
                 )
 
-
 def add_users_for_testing(): 
     print("Adding user") 
     first_name = random.choice(FIRST_NAMES)

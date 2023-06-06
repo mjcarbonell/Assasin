@@ -1,4 +1,4 @@
-timestamp: 2023-06-05T19:41:18.695480
+timestamp: 2023-06-06T15:50:17.934080
 CREATE TABLE "py4web_session"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "rkey" CHAR(512),
@@ -8,7 +8,7 @@ CREATE TABLE "py4web_session"(
     "expires_on" TIMESTAMP
 );
 success!
-timestamp: 2023-06-05T19:41:18.719695
+timestamp: 2023-06-06T15:50:17.958806
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "username" CHAR(512) UNIQUE,
@@ -22,14 +22,14 @@ CREATE TABLE "auth_user"(
     "past_passwords_hash" TEXT
 );
 success!
-timestamp: 2023-06-05T19:41:18.738570
+timestamp: 2023-06-06T15:50:17.969352
 CREATE TABLE "auth_user_tag_groups"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "tagpath" CHAR(512),
     "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  
 );
 success!
-timestamp: 2023-06-05T19:41:18.757226
+timestamp: 2023-06-06T15:50:17.982543
 CREATE TABLE "group"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "creator" CHAR(512),
@@ -40,7 +40,7 @@ CREATE TABLE "group"(
     "active" CHAR(1)
 );
 success!
-timestamp: 2023-06-05T19:41:18.769716
+timestamp: 2023-06-06T15:50:17.992507
 CREATE TABLE "player"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "username" CHAR(512),
@@ -52,7 +52,7 @@ CREATE TABLE "player"(
     "creation_date" TIMESTAMP
 );
 success!
-timestamp: 2023-06-05T19:41:18.781574
+timestamp: 2023-06-06T15:50:18.001435
 CREATE TABLE "statistics"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "player_id" INTEGER REFERENCES "player" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
