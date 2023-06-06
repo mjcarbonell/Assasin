@@ -9,9 +9,9 @@
   </thead>
   <tbody>
     <tr v-for="statistic in statistics">
-      <td>{{ statistic.player.nickname }}</td>
-      <td>{{ statistic.kills }}</td>
-      <td>{{ statistic.games_survived }}</td>
+      <td>[[=statistics.player_id.nickname]]</td>
+      <td>[[=statistics.kills]]</td>
+      <td>[[=statistics.games_survived]]</td>
     </tr>
   </tbody>
 </table>
@@ -20,8 +20,8 @@
 <form action="[[=URL('statistics_page', signer=url_signer)]]" method="POST">
   <label for="player_id">Player:</label>
   <select name="player_id" id="player_id">
-    <option v-for="statistic in statistics" :value="statistic.player.id">
-      {{ statistic.player.nickname }}
+    <option v-for="player in players" :value="player.id">
+      [[=player.nickname]]
     </option>
   </select>
   <br />
@@ -33,3 +33,19 @@
   <br />
   <input type="submit" value="Update" />
 </form>
+
+<h2>Leaderboard</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Player</th>
+      <th>Kills</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="statistic in leaderboard">
+      <td>[[=statistics.player_id.nickname]]</td>
+      <td>[[=statistics.kills]]</td>
+    </tr>
+  </tbody>
+</table>
