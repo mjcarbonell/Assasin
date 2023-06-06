@@ -172,20 +172,25 @@ let init = (app) => {
             app.vue.rows = app.enumerate(response.data.rows); 
             app.vue.players = app.enumerate(response.data.players);
             app.vue.currentUser = response.data.currentUser; 
+
+            axios.get(get_groups_url).then(function (secondResponse){
+                app.vue.groups = app.enumerate(secondResponse.data.groups);
+                for(let g of app.vue.groups){
+                    Vue.set(g, 'active', false);
+                }
+                app.count_players(); 
+            })
         })
-        axios.get(get_groups_url).then(function (response){
-            app.vue.groups = app.enumerate(response.data.groups);
-        })
-        for(let g of app.vue.groups){
-            Vue.set(g, 'active', false);
-        }
+        
         
         // console.log(app.vue.players);
         // console.log(app.vue.groups); 
         
-        setTimeout(function() {
-            app.count_players();
-        }, 1000);
+        // setTimeout(function() {
+        //     app.count_players();
+        // }, 1000);
+
+
         // app.check_status(); 
         setInterval(app.check_status, 2000); 
 

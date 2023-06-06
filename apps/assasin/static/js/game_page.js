@@ -20,6 +20,7 @@ let init = (app) => {
         winner: null,
         current_assasin: null, 
         has_added: false, 
+        called_once: false, 
     };    
     
     app.enumerate = (a) => {
@@ -86,12 +87,16 @@ let init = (app) => {
                                 } 
                                 else{ // if assasin wins they get +1 win 
                                     Vue.set(app.vue, 'winner', app.vue.current_assasin); 
-                                    axios.post(add_win_url, 
-                                        {
-                                            winner: app.vue.current_assasin,
-                                        }).then(function (thirdResponse){
-                                            console.log('success added vote');
-                                    })
+                                    console.log("CALLED ONCE: ", app.vue.called_once); 
+                                    if (app.vue.called_once == false){
+                                        Vue.set(app.vue, 'called_once', true); 
+                                        axios.post(add_win_url, 
+                                            {
+                                                winner: app.vue.current_assasin,
+                                            }).then(function (thirdResponse){
+                                                console.log('success added vote');
+                                        })
+                                    }
                                     // console.log("WINNER"); 
                                     // console.log(p); 
                                 }

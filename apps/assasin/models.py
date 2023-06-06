@@ -51,6 +51,16 @@ db.define_table('statistics',
                 Field('games_survived', 'integer', default=0)
                 )
 
+
+def add_users_for_testing(): 
+    print("Adding user") 
+    first_name = random.choice(FIRST_NAMES)
+    last_name = first_name = random.choice(LAST_NAMES)
+    group_id = db.group.insert(creator=first_name)
+    db.player.insert(username=first_name, nickname=last_name, group_id=group_id)
+
+
+# add_users_for_testing() 
 db.commit()
 
 # Comment out this line if you are not interested. 

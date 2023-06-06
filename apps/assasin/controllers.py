@@ -245,7 +245,7 @@ def vote_player():
     voted_player = request.json.get('voted_player')
     players = db(db.player).select()
     for p in players: 
-        if p.username == currentUser: 
+        if (p.username == currentUser): 
             p.update_record(vote=voted_player)
 
     return dict(message="voted_played succesfully")
