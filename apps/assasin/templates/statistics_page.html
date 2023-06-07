@@ -1,26 +1,90 @@
 [[extend 'layout.html']]
 
-<style>
-  [v-cloak] {
-    display: none;
-  }
-</style>
+<div class="section" id="vue-target">
+  <div class="columns">
+    <div class="column is-half">
+      <div class="box">
+        <h1
+          class="title is-4 has-text-centered has-background-primary has-text-white"
+        >
+          Player Statistics
+        </h1>
+        <table
+          class="table is-bordered is-striped is-narrow is-hoverable has-background-light"
+        >
+          <thead>
+            <tr>
+              <th class="has-text-centered has-background-info has-text-white">
+                Nickname
+              </th>
+              <th class="has-text-centered has-background-info has-text-white">
+                Wins
+              </th>
+              <th class="has-text-centered has-background-info has-text-white">
+                Last Word
+              </th>
+              <th class="has-text-centered has-background-info has-text-white">
+                Voted For
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-for="player in players">
+              <tr>
+                <td>{{ player.nickname }}</td>
+                <td>{{ player.wins }}</td>
+                <td>{{ player.last_word }}</td>
+                <td>
+                  <template v-if="player.vote && player.vote.length > 0">
+                    <span
+                      v-for="(votedPlayer, index) in player.vote"
+                      :key="index"
+                    >
+                      {{ votedPlayer.nickname }}
+                      <span v-if="index < player.vote.length - 1">, </span>
+                    </span>
+                  </template>
+                  <span v-else>No vote</span>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-<div class="section" id="vue-target" v-cloak>
-  <template v-for="player in players">
-      <span class="tag is-info">{{player.nickname}}</span>
-      <span>{{player}}</span>
-     
-    </h2>
-  </template>
-
-
-  <template v-for="g in groups">
-    <h1>GROUP</h1>
-    <h1>{{g}}</h1>
-
-  </template>
-
+    <div class="column">
+      <div class="box">
+        <h1
+          class="title is-4 has-text-centered has-background-primary has-text-white"
+        >
+          Leaderboard
+        </h1>
+        <table
+          class="table is-bordered is-striped is-narrow is-hoverable has-background-light"
+        >
+          <thead>
+            <tr>
+              <th class="has-text-centered has-background-info has-text-white">
+                Nickname
+              </th>
+              <th class="has-text-centered has-background-info has-text-white">
+                Wins
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-for="player in leaderboard">
+              <tr>
+                <td>{{ player.nickname }}</td>
+                <td>{{ player.wins }}</td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 
 [[block page_scripts]]

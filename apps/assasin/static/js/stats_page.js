@@ -5,6 +5,7 @@ let init = (app) => {
   app.data = {
     rows: [], // rows are the auth.users in the database
     players: [],
+    leaderboard: [],
     groups: [],
     nickname: "", // current username
     currentUser: "",
@@ -32,17 +33,33 @@ let init = (app) => {
       // FIRST THEN
       app.vue.rows = app.enumerate(response.data.rows);
       app.vue.players = app.enumerate(response.data.players);
+
+      // Fetch the details of the voted player for each player
+      for (let player of app.vue.players) {
+        if (player.vote !== null) {
+          player.vote = app.vue.players.find(
+            (p) => p._idx === player.vote._idx
+          );
+        }
+      }
+
+      // Calculate leaderboard based on wins
+      app.vue.leaderboard = app.vue.players.sort((a, b) => b.wins - a.wins);
+
       app.vue.currentUser = response.data.currentUser;
       axios.get(get_groups_url).then(function (response) {
-        //SECOND THEN
+        // SECOND THEN
         app.vue.groups = app.enumerate(response.data.groups);
         console.log("PLAYERS");
         console.log(app.vue.players);
         console.log("GROUPS");
         console.log(app.vue.groups);
+        console.log("LEADERBOARD");
+        console.log(app.vue.leaderboard);
       });
     });
   };
+
   app.init();
 };
 
