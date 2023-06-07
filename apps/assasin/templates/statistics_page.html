@@ -1,6 +1,12 @@
 [[extend 'layout.html']]
 
 <div class="section" id="vue-target">
+
+
+  <h1>HI FROM MAX!</h1>
+  <input class="input" type="text" placeholder="your last words here. " v-model="last_words" /> 
+  <button class="button is-link" @click="set_last_words">set last_words</button>
+
   <div class="columns">
     <div class="column is-half">
       <div class="box">
@@ -92,6 +98,7 @@
 <script>
   let get_users_url = "[[=XML(get_users_url)]]";
   let get_groups_url = "[[=XML(get_groups_url)]]";
+  let add_last_words_url = "[[=XML(add_last_words_url)]]"; 
 </script>
 
 <script src="js/stats_page.js"></script>

@@ -9,6 +9,7 @@ let init = (app) => {
     groups: [],
     nickname: "", // current username
     currentUser: "",
+    last_words: "", 
   };
 
   app.enumerate = (a) => {
@@ -20,7 +21,32 @@ let init = (app) => {
     return a;
   };
 
-  app.methods = {};
+  app.set_last_words = function () {
+    for(let p of app.vue.players){
+      if(p.username == app.vue.currentUser){
+        // console.log("found user"); 
+        axios.post(add_last_words_url, 
+          {
+            currentUser: app.vue.currentUser, 
+            last_words: app.vue.last_words, 
+          }).then(function(response)
+          {
+            console.log("POSTED"); 
+            // console.log(response.data.message); 
+            for(let p of app.vue.players){
+              if(p.username == app.vue.currentUser){
+                Vue.set(p, 'last_word', app.vue.last_words); 
+              }
+            }
+            Vue.set(app.vue, 'last_words', '');
+          })
+      }
+    }
+  }
+
+  app.methods = {
+    set_last_words: app.set_last_words, 
+  };
 
   app.vue = new Vue({
     el: "#vue-target",

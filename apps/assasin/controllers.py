@@ -93,6 +93,7 @@ def statistics_page():
     return dict(
         get_users_url=URL('get_users', signer=url_signer),
         get_groups_url=URL('get_groups', signer=url_signer),
+        add_last_words_url=URL('add_last_words', signer=url_signer), 
         url_signer=url_signer,
     )
 
@@ -247,3 +248,21 @@ def add_win():
             else:
                 p.update_record(wins=int(p.wins) + 1)
     return dict(message="winner gets another win")
+
+@action("add_last_words", method="POST")
+@action.uses(db, auth.user, url_signer.verify())
+def add_last_words():
+    currentUser = request.json.get('currentUser')
+    last_words = request.json.get('last_words')
+    print("CURRREEEEEENT")
+    print(currentUser)
+    print("LAST WOORDS")
+    print(last_words)
+    player = db(db.player.username == currentUser).select().first() 
+    if(player):
+        player.update_record(last_word=last_words)
+    print("PLAYER") 
+    print(player) 
+    return dict(message="winner gets another win")
+
+
