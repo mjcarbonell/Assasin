@@ -60,14 +60,16 @@ let init = (app) => {
       app.vue.rows = app.enumerate(response.data.rows);
       app.vue.players = app.enumerate(response.data.players);
 
-      // Fetch the details of the voted player for each player
-      for (let player of app.vue.players) {
-        if (player.vote !== null) {
-          player.vote = app.vue.players.find(
-            (p) => p._idx === player.vote._idx
-          );
+      for(let p of app.vue.players){
+        if(p.vote != null){ // if the player has a valid vote that isnt null 
+          console.log(p.username); 
+          for(let k of app.vue.players){ // iterate and fuien a name for their vote
+            if (k.id == p.vote){ // find player that matches id 
+              p.vote = k.username; 
+            }
+          }
         }
-      }
+      } 
 
       // Calculate leaderboard based on wins
       app.vue.leaderboard = app.vue.players.sort((a, b) => b.wins - a.wins);

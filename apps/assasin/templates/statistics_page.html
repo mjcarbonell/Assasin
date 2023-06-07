@@ -6,8 +6,9 @@
     <span class="icon"></span> 
     <span>Back to home page</span>
   </a>
+  <h1 style="margin-bottom: 10px;">&nbsp;</h1>
 
-  <h1>HI FROM MAX!</h1>
+
   <input class="input" type="text" placeholder="your last words here. " v-model="last_words" /> 
   <button class="button is-link" @click="set_last_words">set last_words</button>
 
@@ -44,18 +45,7 @@
                 <td>{{ player.nickname }}</td>
                 <td>{{ player.wins }}</td>
                 <td>{{ player.last_word }}</td>
-                <td>
-                  <template v-if="player.vote && player.vote.length > 0">
-                    <span
-                      v-for="(votedPlayer, index) in player.vote"
-                      :key="index"
-                    >
-                      {{ votedPlayer.nickname }}
-                      <span v-if="index < player.vote.length - 1">, </span>
-                    </span>
-                  </template>
-                  <span v-else>No vote</span>
-                </td>
+                <td>{{ player.vote }}</td>
               </tr>
             </template>
           </tbody>
