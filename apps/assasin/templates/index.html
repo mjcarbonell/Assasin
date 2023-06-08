@@ -13,12 +13,15 @@
   <!-- CHECKS IF PLAYER IS REGISTERED -->
   <div v-if="inPlayers == false" style="margin-bottom: 20px;">
     <h1>Welcome to Assasin!</h1>
+    <!-- the nickname field is the value user types into the input box -->
+    <!-- button is used to add the player to the databse by calling add_player() in our Vue script -->
     <input class="input" type="text" placeholder="type nickname here" v-model="nickname" /> 
     <button class="button is-link" @click="add_player">set nickname</button>
   </div>
   <div v-else> 
     welcome back! 
     <h1 style="margin-bottom: 10px;">&nbsp;</h1>
+    <!-- Button to redirect us to statisitics page from our controllers.py -->
     <a class="button is-primary" href="[[=URL('statistics_page', signer=url_signer)]]">
       <span class="icon"></span>
       <span>Go to statistics</span>
@@ -26,7 +29,7 @@
   </div>
 
   <h1 style="margin-bottom: 20px;">&nbsp;</h1>
-
+    <!-- Button to redirect us to group page from our controllers.py -->
     <a class="button is-primary" href="[[=URL('group_page', signer=url_signer)]]">
       <span class="icon"></span> 
       <span>Go to group</span>

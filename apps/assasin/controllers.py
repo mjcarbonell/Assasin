@@ -252,7 +252,7 @@ def add_win():
             print("ADDDING win")
             if (p.wins == None): # if the wins are none, then we set it to 1 
                 p.update_record(wins=1)
-            else: # we add 1 to wins if they are alraedy an integer 
+            else: # we add 1 to wins if they are already an integer 
                 p.update_record(wins=int(p.wins) + 1)
     return dict(message="winner gets another win")
 

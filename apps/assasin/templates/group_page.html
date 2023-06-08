@@ -8,13 +8,13 @@
 
 <div class="section" id="vue-target" v-cloak>
 
-
+     <!-- Button to redirect us to statisitics page from our controllers.py -->
 
     <a class="button is-primary" href="[[=URL('statistics_page', signer=url_signer)]]">
         <span class="icon"></span>
         <span>Go to statistics</span>
     </a>
-
+    <!-- Button to redirect us to index page from our controllers.py -->
     <a class="button is-primary" href="[[=URL('index', signer=url_signer)]]">
         <span class="icon"></span> 
         <span>Back to home page</span>
@@ -36,7 +36,7 @@
         <button class="button is-link" @click="create_group">create a group!</button>
     </h2>
 
-    <!-- <h1 style="margin-bottom: 1px;">&nbsp;</h1> -->
+    <!-- Button to redirect us to game_page from our controllers.py -->
     <a v-if="active_group != null" class="button is-primary is-flex justify-content-center" href="[[=URL('game_page', signer=url_signer)]]">
         <span class="icon"></span> 
         <span class="is-centered">{{active_group.creator}}'s group is active</span>
@@ -49,16 +49,19 @@
     <h2 v-for="group in groups">
         <!-- SHOW ALL GROUPS with active creators HERE -->
         <div class="group-wrapper">
-        
+            <!-- add_yourself() function from vue script is called once button is pressed. We send the id of the group they click on-->
             <a class="button" @click="add_yourself(group.id)">{{group.creator}}'s group</a>
-            <span class="tag is-primary" v-if="group.bot==true">Bot group. Join Here!</span>
+            <!-- If the group is a bot or not, we show it in green/red to show that you can join bot groups but cannot join human groups -->
+            <span class="tag is-primary" v-if="group.bot==true">Bot group. Join Here!</span> 
             <span class="tag is-danger" v-if="group.bot!=true">Joining user groups are unavailable at this time</span>
             <span class="tag is-yellow">total players: {{group.total_players}}</span>
+            <!-- if the total players ingroup is >= 3 then you are allowed to set it as your active group -->
             <a v-if="group.total_players >= 3" class="button is-primary" @click="start_game(group.id)">
                 <span class="icon"></span> 
                 <span>set active</span>
             </a>
         </div>
+        <!-- displaying all players in associated group by using our id linkage -->
         <template v-for="player in players" >
             <h2 v-if="group.id === player.group_id">
                 <div>

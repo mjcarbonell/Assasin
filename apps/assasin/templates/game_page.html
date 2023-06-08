@@ -11,12 +11,13 @@
         <img src="images/fighting.gif" alt="Group Icon" class="group-icon" style="width: 200px; height: 200px;">
     </h1>
     <h1 class="title is-3 has-text-centered" v-if="active_group==null">no active group at this time...</h1>
-
+    <!-- if the game has not ended and there is an active group we show details of the group  -->
     <template v-if="game_ended==false && active_group!=null"> 
         <h1 class="title is-3 has-text-centered" v-if="active_group!=null">current game session : {{active_group.creator}}'s group </h1>
         <h1 class="title is-4 has-text-centered ">30 seconds until a winner is crowned</h1>
         <h1 class="title is-4 has-text-centered ">click on someone's name to vote them as the assasin</h1>
     </template>
+    <!-- if the game did end we show details of who was killed and who the winner is -->
     <template v-if="game_ended==true">
         <h1 class="title is-3 has-text-centered">game has ended! </h1>
         <h1 style="margin-bottom: 20px;">&nbsp;</h1>
@@ -26,6 +27,7 @@
     <h1 style="margin-bottom: 20px;">&nbsp;</h1>
 
 
+    <!-- if the winner is the current assasin and the game ended we show that the assasin wins. Else we show that the bystanders win since assasin was killed -->
     <h1 v-if="winner==current_assasin && game_ended==true" class="title is-3 has-text-centered"> The assasin, {{assasin_nickname}} wins!</h1>
     <h1 v-if="winner!=current_assasin && game_ended==true" class="title is-3 has-text-centered">Bystanders win! the assasin was {{assasin_nickname}}</h1>
     <h1 class="title is-4 has-text-centered" v-if="game_ended==false && active_group!=null">{{timer}}</h1>
@@ -36,7 +38,7 @@
             <h1 style="margin-bottom: 10px;">&nbsp;</h1>
         </template>
     </template>
-
+    <!-- if the game ended, the user has the option to go back to the group page -->
     <a v-if="game_ended==true" class="button is-primary " href="[[=URL('group_page', signer=url_signer)]]">
         <span class="icon"></span> 
         <span>Back to groups</span>
