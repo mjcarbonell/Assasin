@@ -22,6 +22,11 @@ let init = (app) => {
   };
 
   app.set_last_words = function () {
+    // This function handles setting the last words for the current user. 
+    // it sends a POST request to the server with the current user's username
+    // and the last words they. Upon successful response, it updates the 
+    // last_word property of the corresponding player object and clears
+    // the last_words field in the Vue data
     for(let p of app.vue.players){
       if(p.username == app.vue.currentUser){
         // console.log("found user"); 
@@ -65,7 +70,7 @@ let init = (app) => {
           console.log(p.username); 
           for(let k of app.vue.players){ // iterate and fuien a name for their vote
             if (k.id == p.vote){ // find player that matches id 
-              p.vote = k.username; 
+              p.vote = k.nickname; 
             }
           }
         }

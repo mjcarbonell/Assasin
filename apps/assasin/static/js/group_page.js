@@ -24,6 +24,9 @@ let init = (app) => {
         return a;
     };    
     app.create_group = function () {
+        // Handles creation of new group. It sends POST request to server with current user 
+        // as the creator, receives a resposne with new group ID, adds the new group 
+        // to the groups array, updates the currentID, updates the player count 
         console.log('create group func'); 
         // also need to set group_id of currentUser
         axios.post(create_group_url,
@@ -59,10 +62,7 @@ let init = (app) => {
                             
                         })
                 })
-                // console.log("refresh")
-                // console.log(app.vue.groups);
-                // console.log(app.vue.players); 
-                // now we update the players adn 
+                
             })
         // Great. Now the current User is assigned a new group 
         // when they create one. Makes sense. 
@@ -70,6 +70,9 @@ let init = (app) => {
 
     app.add_yourself = function (group_id) {
         // if player is adding themselves and they have a group then delete the old group 
+        // This function handles adding the current user to an existing group. 
+        // Sends a POST request to the server with group ID and current user, assigns 
+        // current user to the group, deletes old group if any, and updates player count 
         console.log(group_id);
         console.log("ADDING URSELF");
         axios.post(change_id_url,
@@ -104,35 +107,32 @@ let init = (app) => {
 
     }
     app.count_players = function () {
-        // console.log(app.vue.groups);
-        // console.log(app.vue.players);
+        // Function is to update total_players property of each group by iterating through 
+        // groups and players arrays, counting the players in each group, and updating the value 
         for(let g of app.vue.groups){
             Vue.set(g, 'total_players', 0); 
             for(let p of app.vue.players){
                 if(parseInt(g.id) == parseInt(p.group_id)){
                     newTotal = g.total_players + 1; 
                     Vue.set(g, 'total_players', newTotal); 
-                    // console.log("found one");
                 }
             }
         }
-        console.log("COUNTING")
-        console.log(app.vue.groups); 
-        
     }
     app.start_game = function (group_id) { // setting group to true and all others to false 
-        // console.log('starting game'); 
+        // starts game for specific group and players arrays, counting the playeers 
+        // in each group, and updating the value 
         axios.post(set_active_url,
             {
                 group_id: group_id,
             }).then(function (response){
-                // Vue.set(app.vue, 'active_group', response.data.active_group); 
-                // console.log("ACTIVEE")
-                // console.log(app.vue.active_group); 
         })
         Vue.set(app.vue, 'game_started', true); 
     }
     app.check_status = function() {
+        // Function periodically checks status of groups by sending GET request 
+        // to the server. It updates the active_group based on the resposne, taking 
+        // into account the total player count of the group 
         let temp = []; 
         axios.get(get_groups_url).then(function (response){
             temp = app.enumerate(response.data.groups);
@@ -193,23 +193,9 @@ let init = (app) => {
                 app.count_players(); 
             })
         })
-        
-        
-        // console.log(app.vue.players);
-        // console.log(app.vue.groups); 
-        
-        // setTimeout(function() {
-        //     app.count_players();
-        // }, 1000);
-
-
-        // app.check_status(); 
-        setInterval(app.check_status, 2000); 
-
-       
+        setInterval(app.check_status, 2000);        
     };
     app.init();
-   
 };
 
 

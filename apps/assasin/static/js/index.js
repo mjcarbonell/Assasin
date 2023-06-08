@@ -23,6 +23,9 @@ let init = (app) => {
         // console.log(app.vue.rows);  
     }
     app.add_player = function () {
+        // add_player adds a new player to the game by making POST request to the server with 
+        // username and nickname, then updates the players array with the new player's 
+        // information and sets the inPlayers flag to true 
         console.log("add player ");
         axios.post(add_player_url,
             {
@@ -55,6 +58,10 @@ let init = (app) => {
     });
 
     app.init = () => {
+        // when the page loads. It retrieves the user and player data from the server 
+        // using get_users_url. It updates rows and players arrays in the Vue data object and checks 
+        // if the current user is already in the players array, setting 
+        // inPlayers flag accordingly. 
         console.log("init");
         axios.get(get_users_url).then(function (response){
             app.vue.rows = app.enumerate(response.data.rows); 

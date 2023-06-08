@@ -31,6 +31,10 @@ let init = (app) => {
         return a;
     };    
     app.check_status = function() {
+        // This function perodically checks the status of the groups
+        // by sending a GET request to the server. It updates the active_group
+        // based on the response and retrieves the current assasins nickanem from the 
+        // players array
         let temp = []; 
         axios.get(get_groups_url).then(function (response){
             temp = app.enumerate(response.data.groups);
@@ -55,6 +59,11 @@ let init = (app) => {
     }
     app.start_timer = function () { // we subtract 1 and it is called every second 
         // we end the game and set the active group back to null if timer is 0 
+        // starts game timer and decreents by 1 each second. When timer reaches 0
+        // and there is an active group, it sends a POST request to set the 
+        // group as inactive, updates the active_group to null, sets 
+        // game_ended to true, and calculates voting results to determine 
+        // the killed player and the winner. 
         let temp = []; // will hold copy of players most recent votes
         let total = []; 
         let available_ids = []; 
@@ -118,6 +127,11 @@ let init = (app) => {
         }
     }
     app.vote = function (voted_player, vote_nickname) { // if user refreshes than they have to wait 30 seconds again 
+        // Function handles the player voting. If the timer is still running 
+        // and there is an active group, it sends a POST request to 
+        // record the vote for the current user. It updates the vote 
+        // peroperty of the corresponding player object and sets the 
+        // vote_clicked flag to true
         if (app.vue.timer > 0 && app.vue.active_group != null){ 
             Vue.set(app.vue, 'vote_clicked', true); 
             // player can vot if timer is not zero and active group is still active 

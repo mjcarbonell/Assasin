@@ -28,22 +28,22 @@ def get_time():
 
 db.define_table(
     'group',
-    Field('creator'),
-    Field('current_assasin'),
+    Field('creator'), # represents the user who created the group 
+    Field('current_assasin'), # Stores the username of the current_assasin of the group session 
     Field('winner'), # this can either be bystanders or the username of the assasin
     Field('players', 'list:string'), 
-    Field('bot', 'boolean', default=False),
-    Field('active', 'boolean', default=False),
+    Field('bot', 'boolean', default=False), # Indicates whether group is hosted by a bot
+    Field('active', 'boolean', default=False), # INdicates active status of the group 
 )
 db.define_table(
     'player',
-    Field('username'),
-    Field('nickname'),
-    Field('group_id', 'reference group'),
-    Field('wins', 'integer', default=0),
-    Field('last_word'),
-    Field('vote', 'reference player'),
-    Field('creation_date', 'datetime', default=get_time),
+    Field('username'), # this is the username retrieved from auth.user 
+    Field('nickname'), # this is the nickname that user must enter to register themselves as player 
+    Field('group_id', 'reference group'), # group_id that must be assigned to an exisitng group
+    Field('wins', 'integer', default=0), # total wins. A player wins if they were the assasin and did not get killed 
+    Field('last_word'), # last_word is our form of a quote system. Like a bio on Discord 
+    Field('vote', 'reference player'), # Vote field is the id of an exisiting player 
+    Field('creation_date', 'datetime', default=get_time), 
 )
 
 db.define_table('statistics',
@@ -52,7 +52,7 @@ db.define_table('statistics',
                 Field('games_survived', 'integer', default=0)
                 )
 
-def add_users_for_testing(): 
+def add_users_for_testing():  # Adding players and groups here
     print("Adding user") 
     first_name = random.choice(FIRST_NAMES)
     last_name = first_name = random.choice(LAST_NAMES)
