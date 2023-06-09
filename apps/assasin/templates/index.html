@@ -8,7 +8,13 @@
 
 
 <div class="section" id="vue-target" v-cloak>
-  <!-- {{players}} -->
+  <h1 class="title is-3 has-text-centered">
+    <span class="is-centered is-size-4">Home Page </span>
+    <h1 style="margin-bottom: 10px;">&nbsp;</h1>
+    <img src="images/wizard.jpg" alt="Group Icon" class="group-icon" style="width: 200px; height: 200px;">
+  
+
+  </h1>
 
   <!-- CHECKS IF PLAYER IS REGISTERED -->
   <div v-if="inPlayers == false" style="margin-bottom: 20px;">
@@ -19,7 +25,7 @@
     <button class="button is-link" @click="add_player">set nickname</button>
   </div>
   <div v-else> 
-    welcome back! 
+    <h1 class="tag is-link is-dark is-medium">Welcome Back!</h1>
     <h1 style="margin-bottom: 10px;">&nbsp;</h1>
     <!-- Button to redirect us to statisitics page from our controllers.py -->
     <a class="button is-primary" href="[[=URL('statistics_page', signer=url_signer)]]">
