@@ -1,1 +1,0 @@
-This folder should contain the apps folder created by py4web
